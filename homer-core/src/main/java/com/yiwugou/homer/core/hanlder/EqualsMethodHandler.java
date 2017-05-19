@@ -1,0 +1,38 @@
+package com.yiwugou.homer.core.hanlder;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
+public class EqualsMethodHandler implements MethodHandler {
+    private Class<?> clazz;
+
+    private Method[] methods;
+
+    public EqualsMethodHandler(Method method) {
+        this.clazz = method.getDeclaringClass();
+        this.methods = this.clazz.getMethods();
+    }
+
+    @Override
+    public Object invoke(Object[] args) throws Throwable {
+        try {
+            Object otherHandler = args.length > 0 && args[0] != null ? Proxy.getInvocationHandler(args[0]) : null;
+
+            return this.equalss(otherHandler);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private boolean equalss(Object obj) {
+        Class<?>[] interfaces = obj.getClass().getInterfaces();
+        for (Class<?> inter : interfaces) {
+            if (inter.equals(this.clazz)) {
+                return Arrays.equals(this.methods, inter.getMethods());
+            }
+        }
+        return false;
+    }
+
+}
