@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.codec.Decoder;
 
-public class DecoderFastjson implements Decoder {
+public class FastjsonDecoder implements Decoder {
 
     @Override
     public Object decode(Response response, Class<?> returnType) {

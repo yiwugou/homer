@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.yiwugou.homer.core.Homer;
+import com.yiwugou.homer.core.config.FileConfigLoader;
 
 public class HomerCoreTest {
     private DemoService demoService;
@@ -34,6 +35,11 @@ public class HomerCoreTest {
             String after = this.demoService.foo();
             // System.err.println(after);
         }
+    }
+
+    public void propertiesTest() {
+        DemoService demoService = Homer.instance().setConfigLoader(new FileConfigLoader("homer.properties"))
+                .build(DemoService.class);
     }
 
     public static void main(String[] args) throws Exception {

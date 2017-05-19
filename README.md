@@ -25,3 +25,21 @@ DemoService demoService = Homer.instance().build(DemoService.class);
 
 ```
 
+
+
+## use properties file
+homer.properties
+
+```properties
+
+com.yiwugou.homer.core.test.DemoService.url=http://127.0.0.1:8762;http://127.0.0.1:8763;http://127.0.0.1:8764;
+com.yiwugou.homer.core.test.DemoService.execute=100
+com.yiwugou.homer.core.test.DemoService.foo.execute=10
+
+```
+
+```java
+
+DemoService demoService = Homer.instance().build(DemoService.class);
+
+```
