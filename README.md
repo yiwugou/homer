@@ -40,6 +40,6 @@ com.yiwugou.homer.core.test.DemoService.foo.execute=10
 
 ```java
 
-DemoService demoService = Homer.instance().build(DemoService.class);
+DemoService demoService = Homer.instance().setConfigLoader(new FileConfigLoader("homer.properties")).build(DemoService.class);
 
 ```
