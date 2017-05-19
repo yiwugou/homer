@@ -1,5 +1,5 @@
 
-# a rest client like feign
+# a rest client like [feign](https://github.com/OpenFeign/feign)
 
 ```java
 
