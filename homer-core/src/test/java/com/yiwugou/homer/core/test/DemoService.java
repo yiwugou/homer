@@ -4,6 +4,7 @@ import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
 import com.yiwugou.homer.core.annotation.RequestUrl;
+import com.yiwugou.homer.core.enums.LoadBalanceEnum;
 import com.yiwugou.homer.core.enums.MethodEnum;
 
 @RequestUrl({ "http://127.0.0.1:8762", "http://127.0.0.1:8763", "http://127.0.0.1:8764" })
@@ -11,7 +12,7 @@ import com.yiwugou.homer.core.enums.MethodEnum;
 public interface DemoService {
 
     @RequestMapping("foo")
-    @RequestConfig(execute = 10000, active = 10000)
+    @RequestConfig(execute = 10000, active = 10000, loadBalance = LoadBalanceEnum.ROUND_ROBIN)
     String foo();
 
     @RequestMapping(value = "foo1/{username}/{password}", method = MethodEnum.GET)
