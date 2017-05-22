@@ -29,10 +29,6 @@ public class MethodOptionsFactory {
         this.classMethodName = this.className + "." + this.methodName;
     }
 
-    private String classMethodName(String className, String methodName) {
-        return className + "." + methodName;
-    }
-
     public MethodOptions create() {
         RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
         RequestConfig classRequestConfig = this.clazz.getAnnotation(RequestConfig.class);
@@ -62,12 +58,11 @@ public class MethodOptionsFactory {
             RequestConfig methodRequestConfig) {
         String classLoadBalance = classRequestConfig == null ? RequestDefault.LOAD_BALANCE
                 : this.configLoader.loader(this.className + ConfigLoader.LOAD_BALANCE,
-                        classRequestConfig.loadBalance().toString());
+                        classRequestConfig.loadBalance().toString().toLowerCase());
         String methodLoadBalance = methodRequestConfig == null ? RequestDefault.LOAD_BALANCE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.LOAD_BALANCE,
-                        methodRequestConfig.loadBalance().toString());
-        String loadBalance = notDef(classLoadBalance, RequestDefault.LOAD_BALANCE.toLowerCase(),
-                methodLoadBalance);
+                        methodRequestConfig.loadBalance().toString().toLowerCase());
+        String loadBalance = notDef(classLoadBalance, RequestDefault.LOAD_BALANCE.toLowerCase(), methodLoadBalance);
         methodOptions.setLoadBalance(LoadBalanceFactory.createInstants(loadBalance));
     }
 

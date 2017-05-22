@@ -10,5 +10,5 @@ public class RequestDefault {
     public static final boolean MOCK = true;
     public static final int CONNECT_TIMEOUT = 1000;
     public static final int READ_TIMEOUT = 3000;
-    public static final String LOAD_BALANCE = LoadBalanceEnum.RANDOM.toString();
+    public static final String LOAD_BALANCE = LoadBalanceEnum.RANDOM.toString().toLowerCase();
 }

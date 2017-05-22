@@ -1,6 +1,11 @@
 package com.yiwugou.homer.core.config;
 
 public interface ConfigLoader {
+    /**
+     * <pre>
+     * key: package.Class.{conf} or package.Class.method.{conf}
+     * </pre>
+     */
     <T> T loader(String key, T defaultValue);
 
     static final String URL = ".url";

@@ -24,7 +24,7 @@ public class RoundRobinLoadBalance implements LoadBalance {
     }
 
     private int incrementAndGetModulo(int modulo) {
-        for (;;) {
+        while (true) {
             int current = this.CYCLIC.get();
             int next = (current + 1) % modulo;
             if (this.CYCLIC.compareAndSet(current, next)) {

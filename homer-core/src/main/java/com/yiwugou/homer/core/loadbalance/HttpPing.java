@@ -17,8 +17,7 @@ public class HttpPing implements Ping {
     @Override
     public boolean isAlive(Server server) {
         Request request = Request.builder().method(MethodEnum.GET).url(server.getHostPort())
-                .connectTimeout(RequestDefault.CONNECT_TIMEOUT).readTimeout(RequestDefault.READ_TIMEOUT)
-                .build();
+                .connectTimeout(RequestDefault.CONNECT_TIMEOUT).readTimeout(RequestDefault.READ_TIMEOUT).build();
         try {
             Response response = this.client.execute(request);
             return response != null;
