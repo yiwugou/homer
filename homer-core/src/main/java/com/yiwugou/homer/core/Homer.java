@@ -65,8 +65,8 @@ public final class Homer {
 
     public <T> T build(Class<T> clazz) {
         this.addDefaultFilters();
-        InvocationHandler invocationHandler = new ProxyInvocationHandler(this.client, this.configLoader, this.filters,
-                this.requestInterceptors, this.decoder);
+        InvocationHandler invocationHandler = new ProxyInvocationHandler(clazz, this.client, this.configLoader,
+                this.filters, this.requestInterceptors, this.decoder);
         T proxy = (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[] { clazz }, invocationHandler);
         return proxy;
     }

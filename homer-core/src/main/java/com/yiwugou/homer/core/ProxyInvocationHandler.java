@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.codec.Decoder;
 import com.yiwugou.homer.core.config.ConfigLoader;
@@ -14,11 +15,14 @@ import com.yiwugou.homer.core.factory.MethodHandlerFactory;
 import com.yiwugou.homer.core.factory.MethodOptionsFactory;
 import com.yiwugou.homer.core.filter.Filter;
 import com.yiwugou.homer.core.hanlder.MethodHandler;
+import com.yiwugou.homer.core.interceptor.BasicAuthRequestInterceptor;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 import com.yiwugou.homer.core.invoker.DefaultInvoker;
 import com.yiwugou.homer.core.invoker.Invoker;
+import com.yiwugou.homer.core.util.CommonUtils;
 
 public class ProxyInvocationHandler implements InvocationHandler {
+    private Class<?> clazz;
     private Client client;
     private ConfigLoader configLoader;
     private List<Filter> filters;
@@ -29,14 +33,26 @@ public class ProxyInvocationHandler implements InvocationHandler {
 
     private final Map<Method, MethodOptions> methodOptionsMap = new ConcurrentHashMap<>();
 
-    public ProxyInvocationHandler(Client client, ConfigLoader configLoader, List<Filter> filters,
+    public ProxyInvocationHandler(Class<?> clazz, Client client, ConfigLoader configLoader, List<Filter> filters,
             List<RequestInterceptor> requestInterceptors, Decoder decoder) {
         super();
+        this.clazz = clazz;
         this.client = client;
         this.configLoader = configLoader;
         this.filters = filters;
         this.requestInterceptors = requestInterceptors;
         this.decoder = decoder;
+        this.initDefaultRequestInterceptors();
+    }
+
+    private void initDefaultRequestInterceptors() {
+        RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
+        if (CommonUtils.hasTest(requestUrl.basicAuth())) {
+            String[] us = requestUrl.basicAuth().split(":");
+            String username = us[0];
+            String password = us[1];
+            this.requestInterceptors.add(new BasicAuthRequestInterceptor(username, password));
+        }
     }
 
     @Override
