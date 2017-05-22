@@ -32,8 +32,8 @@ public class ProxyMethodHandler implements MethodHandler {
     @Override
     public Object invoke(Object[] args) throws Throwable {
         while (true) {
-            Server server = this.methodOptions.getLoadBalance().choose(this.methodOptions.getAvailableServers(),
-                    this.method, args);
+            Server server = this.methodOptions.getLoadBalance().choose(this.methodOptions.getUpServers(), this.method,
+                    args);
             if (server == null) {
                 throw new ServerException("no server is available");
             }
@@ -45,10 +45,10 @@ public class ProxyMethodHandler implements MethodHandler {
                     }
                 }
                 Object obj = this.executeAndDecode(request);
-                server.initRetry();
+                this.serverCheck.serverUp(server, this.methodOptions);
                 return obj;
             } catch (Exception e) {
-                this.serverCheck.serverCheck(server, this.methodOptions);
+                this.serverCheck.serverDown(server, this.methodOptions, e);
             }
         }
 
@@ -58,7 +58,7 @@ public class ProxyMethodHandler implements MethodHandler {
         int retry = this.methodOptions.getRetry();
         while (true) {
             try {
-                Response response = this.client.execute(request, this.methodOptions);
+                Response response = this.client.execute(request);
                 if (response.getCode() > 400) {
                     throw new ResponseException(response);
                 }

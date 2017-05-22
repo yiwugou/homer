@@ -38,7 +38,7 @@ public class RequestFactory {
         byte[] body = this.formMapToBytes();
         Map<String, List<String>> headers = this.processHeaders();
 
-        if (!this.server.isAvailable()) {
+        if (!this.server.isAlive()) {
             throw new ServerException(this.server + " is not available ");
         }
 

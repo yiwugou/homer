@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.yiwugou.homer.core.Homer;
-import com.yiwugou.homer.core.config.FileConfigLoader;
+import com.yiwugou.homer.core.config.PropertiesFileConfigLoader;
 
 public class HomerCoreTest {
     private DemoService demoService;
@@ -33,12 +33,12 @@ public class HomerCoreTest {
         int index = 10000;
         while (index-- > 0) {
             String after = this.demoService.foo();
-            // System.err.println(after);
+            System.err.println(after);
         }
     }
 
     public void propertiesTest() {
-        DemoService demoService = Homer.instance().setConfigLoader(new FileConfigLoader("homer.properties"))
+        DemoService demoService = Homer.instance().setConfigLoader(new PropertiesFileConfigLoader("homer.properties"))
                 .build(DemoService.class);
     }
 

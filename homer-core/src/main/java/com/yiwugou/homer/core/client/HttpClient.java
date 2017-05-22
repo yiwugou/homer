@@ -13,24 +13,23 @@ import java.util.zip.GZIPOutputStream;
 
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
-import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class HttpClient implements Client {
 
     @Override
-    public Response execute(Request request, MethodOptions methodOptions) throws IOException {
-        HttpURLConnection connection = this.convertAndSend(request, methodOptions);
+    public Response execute(Request request) throws IOException {
+        HttpURLConnection connection = this.convertAndSend(request);
         Response response = this.convertResponse(connection, request);
         return response;
     }
 
-    private HttpURLConnection convertAndSend(Request request, MethodOptions methodOptions) throws IOException {
+    private HttpURLConnection convertAndSend(Request request) throws IOException {
         final HttpURLConnection connection = (HttpURLConnection) new URL(request.getUrl()).openConnection();
 
-        connection.setConnectTimeout(methodOptions.getConnectTimeout());
-        connection.setReadTimeout(methodOptions.getReadTimeout());
+        connection.setConnectTimeout(request.getConnectTimeout());
+        connection.setReadTimeout(request.getReadTimeout());
         connection.setAllowUserInteraction(false);
         connection.setInstanceFollowRedirects(true);
         connection.setRequestMethod(request.getMethod().toString());

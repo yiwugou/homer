@@ -13,7 +13,7 @@ public class Server {
 
     @Getter
     @Setter
-    private volatile boolean available = true;
+    private volatile boolean alive = true;
 
     @Getter
     private int retry = 0;

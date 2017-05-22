@@ -11,4 +11,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RequestUrl {
     String[] value() default "";
+
+    /**
+     * username:password
+     */
+    String basicAuth() default "";
 }

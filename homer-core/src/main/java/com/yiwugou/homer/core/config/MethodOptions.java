@@ -15,12 +15,12 @@ public class MethodOptions {
     /**
      * package.class.method.url 可用的Server
      */
-    private List<Server> availableServers = new CopyOnWriteArrayList<>();
+    private List<Server> upServers = new CopyOnWriteArrayList<>();
 
     /**
      * 不可用的server
      */
-    private List<Server> unAvailableServers = new CopyOnWriteArrayList<>();
+    private List<Server> downServers = new CopyOnWriteArrayList<>();
 
     /**
      * 重试次数

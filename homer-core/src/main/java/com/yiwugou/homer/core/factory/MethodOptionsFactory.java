@@ -120,7 +120,7 @@ public class MethodOptionsFactory {
                     u = u.substring(0, u.length() - 1);
                 }
                 server = new Server(u);
-                methodOptions.getAvailableServers().add(server);
+                methodOptions.getUpServers().add(server);
             }
         }
     }

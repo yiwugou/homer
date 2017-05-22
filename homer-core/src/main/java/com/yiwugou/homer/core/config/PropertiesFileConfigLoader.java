@@ -5,8 +5,8 @@ import java.util.Properties;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
-public class FileConfigLoader extends PropertiesConfigLoader {
-    public FileConfigLoader(String file) {
+public class PropertiesFileConfigLoader extends PropertiesConfigLoader {
+    public PropertiesFileConfigLoader(String file) {
         try {
             InputStream input = this.getClass().getResourceAsStream(file);
             Properties properties = new Properties();
