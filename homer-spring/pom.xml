@@ -9,8 +9,8 @@
     <dependencies>
         <dependency>
             <groupId>com.yiwugou</groupId>
-            <artifactId>homer-core</artifactId>
-            <version>${parent.version}</version>
+            <artifactId>homer-fastjson</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

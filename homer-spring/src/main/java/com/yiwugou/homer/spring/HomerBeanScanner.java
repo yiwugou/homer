@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import com.yiwugou.homer.core.Homer;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.PropertiesConfigLoader;
+import com.yiwugou.homer.fastjson.FastjsonDecoder;
 
 import lombok.Setter;
 
@@ -46,7 +47,7 @@ public class HomerBeanScanner extends ClassPathBeanDefinitionScanner {
                 String beanClassName = definition.getBeanClassName();
                 Class<?> clazz = Class.forName(beanClassName);
 
-                Homer homer = Homer.instance();
+                Homer homer = Homer.instance().setDecoder(new FastjsonDecoder());
                 if (this.properties != null) {
                     ConfigLoader configLoader = new PropertiesConfigLoader(this.properties);
                     homer.setConfigLoader(configLoader);
