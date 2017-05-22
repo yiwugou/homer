@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.yiwugou.homer.core.Server;
-import com.yiwugou.homer.core.annotation.RequestConfig;
+import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 
 import lombok.Data;
@@ -25,34 +25,34 @@ public class MethodOptions {
     /**
      * 重试次数
      */
-    private Integer retry = RequestConfig.Default.RETRY;
+    private Integer retry = RequestDefault.RETRY;
 
     /**
      * 单秒中 单方法最大请求数
      */
-    private Integer execute = RequestConfig.Default.EXECUTE;
+    private Integer execute = RequestDefault.EXECUTE;
 
     /**
      * 单方法并发数
      */
-    private Integer active = RequestConfig.Default.ACTIVE;
+    private Integer active = RequestDefault.ACTIVE;
 
     /**
      * 缓存时间 毫秒
      */
-    private Long cache = RequestConfig.Default.CACHE;
+    private Long cache = RequestDefault.CACHE;
 
     /**
      * 降级
      */
-    private Boolean mock = RequestConfig.Default.MOCK;
+    private Boolean mock = RequestDefault.MOCK;
 
     /**
      * 负载均衡
      */
     private LoadBalance loadBalance;
 
-    private Integer connectTimeout = RequestConfig.Default.CONNECT_TIMEOUT;
+    private Integer connectTimeout = RequestDefault.CONNECT_TIMEOUT;
 
-    private Integer readTimeout = RequestConfig.Default.READ_TIMEOUT;
+    private Integer readTimeout = RequestDefault.READ_TIMEOUT;
 }

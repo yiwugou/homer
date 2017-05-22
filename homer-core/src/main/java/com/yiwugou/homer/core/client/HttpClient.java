@@ -34,26 +34,31 @@ public class HttpClient implements Client {
         connection.setInstanceFollowRedirects(true);
         connection.setRequestMethod(request.getMethod().toString());
 
-        Collection<String> contentEncodingValues = request.getHeaders().get(Constants.CONTENT_ENCODING);
-        boolean gzipEncodedRequest = contentEncodingValues != null
-                && contentEncodingValues.contains(Constants.ENCODING_GZIP);
-        boolean deflateEncodedRequest = contentEncodingValues != null
-                && contentEncodingValues.contains(Constants.ENCODING_DEFLATE);
-
         boolean hasAcceptHeader = false;
         Integer contentLength = null;
-        for (String field : request.getHeaders().keySet()) {
-            if (field.equalsIgnoreCase(Constants.ACCEPT)) {
-                hasAcceptHeader = true;
-            }
-            for (String value : request.getHeaders().get(field)) {
-                if (field.equals(Constants.CONTENT_LENGTH)) {
-                    if (!gzipEncodedRequest && !deflateEncodedRequest) {
-                        contentLength = Integer.valueOf(value);
+        boolean gzipEncodedRequest = false;
+        boolean deflateEncodedRequest = false;
+
+        if (request.getHeaders() != null) {
+            Collection<String> contentEncodingValues = request.getHeaders().get(Constants.CONTENT_ENCODING);
+            gzipEncodedRequest = contentEncodingValues != null
+                    && contentEncodingValues.contains(Constants.ENCODING_GZIP);
+            deflateEncodedRequest = contentEncodingValues != null
+                    && contentEncodingValues.contains(Constants.ENCODING_DEFLATE);
+
+            for (String field : request.getHeaders().keySet()) {
+                if (field.equalsIgnoreCase(Constants.ACCEPT)) {
+                    hasAcceptHeader = true;
+                }
+                for (String value : request.getHeaders().get(field)) {
+                    if (field.equals(Constants.CONTENT_LENGTH)) {
+                        if (!gzipEncodedRequest && !deflateEncodedRequest) {
+                            contentLength = Integer.valueOf(value);
+                            connection.addRequestProperty(field, value);
+                        }
+                    } else {
                         connection.addRequestProperty(field, value);
                     }
-                } else {
-                    connection.addRequestProperty(field, value);
                 }
             }
         }
@@ -105,7 +110,9 @@ public class HttpClient implements Client {
         }
         body = CommonUtils.inputStreamToBytes(input);
         CommonUtils.close(input);
-        return new Response(code, message, headers, body, request);
+        Response response = Response.builder().code(code).message(message).headers(headers).body(body).request(request)
+                .build();
+        return response;
     }
 
 }

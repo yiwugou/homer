@@ -3,14 +3,14 @@ package com.yiwugou.homer.core;
 import java.util.List;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-@AllArgsConstructor
+@Builder
 public class Response {
     @Getter
     private final int code;

@@ -42,8 +42,11 @@ public class RequestFactory {
             throw new ServerException(this.server + " is not available ");
         }
 
-        return new Request(requestMapping.method(), this.server.getHostPort() + "/" + path, body, headers,
-                this.methodOptions.getConnectTimeout(), this.methodOptions.getReadTimeout());
+        Request request = Request.builder().method(requestMapping.method()).url(this.server.getHostPort() + "/" + path)
+                .body(body).headers(headers).connectTimeout(this.methodOptions.getConnectTimeout())
+                .readTimeout(this.methodOptions.getReadTimeout()).build();
+        return request;
+
     }
 
     private Map<String, List<String>> processHeaders() {

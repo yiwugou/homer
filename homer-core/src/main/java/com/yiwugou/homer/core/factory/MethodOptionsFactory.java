@@ -8,6 +8,7 @@ import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.Constants;
+import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class MethodOptionsFactory {
@@ -59,51 +60,51 @@ public class MethodOptionsFactory {
 
     private void initLoadBalance(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        String classLoadBalance = classRequestConfig == null ? RequestConfig.Default.LOAD_BALANCE
+        String classLoadBalance = classRequestConfig == null ? RequestDefault.LOAD_BALANCE
                 : this.configLoader.loader(this.className + ConfigLoader.LOAD_BALANCE,
                         classRequestConfig.loadBalance().toString());
-        String methodLoadBalance = methodRequestConfig == null ? RequestConfig.Default.LOAD_BALANCE
+        String methodLoadBalance = methodRequestConfig == null ? RequestDefault.LOAD_BALANCE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.LOAD_BALANCE,
                         methodRequestConfig.loadBalance().toString());
-        String loadBalance = notDef(classLoadBalance, RequestConfig.Default.LOAD_BALANCE.toLowerCase(),
+        String loadBalance = notDef(classLoadBalance, RequestDefault.LOAD_BALANCE.toLowerCase(),
                 methodLoadBalance);
         methodOptions.setLoadBalance(LoadBalanceFactory.createInstants(loadBalance));
     }
 
     private void initMock(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        Boolean classMock = classRequestConfig == null ? RequestConfig.Default.MOCK
+        Boolean classMock = classRequestConfig == null ? RequestDefault.MOCK
                 : this.configLoader.loader(this.className + ConfigLoader.MOCK, classRequestConfig.mock());
-        Boolean methodMock = methodRequestConfig == null ? RequestConfig.Default.MOCK
+        Boolean methodMock = methodRequestConfig == null ? RequestDefault.MOCK
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.MOCK, methodRequestConfig.mock());
-        methodOptions.setMock(notDef(methodMock, RequestConfig.Default.MOCK, classMock));
+        methodOptions.setMock(notDef(methodMock, RequestDefault.MOCK, classMock));
     }
 
     private void initCache(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        Long classCache = classRequestConfig == null ? RequestConfig.Default.CACHE
+        Long classCache = classRequestConfig == null ? RequestDefault.CACHE
                 : this.configLoader.loader(this.className + ConfigLoader.CACHE, classRequestConfig.cache());
-        Long methodCache = methodRequestConfig == null ? RequestConfig.Default.CACHE
+        Long methodCache = methodRequestConfig == null ? RequestDefault.CACHE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.CACHE, methodRequestConfig.cache());
-        methodOptions.setCache(notDef(methodCache, RequestConfig.Default.CACHE, classCache));
+        methodOptions.setCache(notDef(methodCache, RequestDefault.CACHE, classCache));
     }
 
     private void initActive(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        Integer classActive = classRequestConfig == null ? RequestConfig.Default.ACTIVE
+        Integer classActive = classRequestConfig == null ? RequestDefault.ACTIVE
                 : this.configLoader.loader(this.className + ConfigLoader.ACTIVE, classRequestConfig.active());
-        Integer methodActive = methodRequestConfig == null ? RequestConfig.Default.ACTIVE
+        Integer methodActive = methodRequestConfig == null ? RequestDefault.ACTIVE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.ACTIVE, methodRequestConfig.active());
-        methodOptions.setActive(notDef(methodActive, RequestConfig.Default.ACTIVE, classActive));
+        methodOptions.setActive(notDef(methodActive, RequestDefault.ACTIVE, classActive));
     }
 
     private void initExecute(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        Integer classExecute = classRequestConfig == null ? RequestConfig.Default.EXECUTE
+        Integer classExecute = classRequestConfig == null ? RequestDefault.EXECUTE
                 : this.configLoader.loader(this.className + ConfigLoader.EXECUTE, classRequestConfig.execute());
-        Integer methodExecute = methodRequestConfig == null ? RequestConfig.Default.EXECUTE
+        Integer methodExecute = methodRequestConfig == null ? RequestDefault.EXECUTE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.EXECUTE, methodRequestConfig.execute());
-        methodOptions.setExecute(notDef(methodExecute, RequestConfig.Default.EXECUTE, classExecute));
+        methodOptions.setExecute(notDef(methodExecute, RequestDefault.EXECUTE, classExecute));
     }
 
     private void initServers(RequestUrl requestUrl, MethodOptions methodOptions) {
@@ -127,11 +128,11 @@ public class MethodOptionsFactory {
 
     private void initRetry(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        Integer classRetry = classRequestConfig == null ? RequestConfig.Default.RETRY
+        Integer classRetry = classRequestConfig == null ? RequestDefault.RETRY
                 : this.configLoader.loader(this.className + ConfigLoader.RETRY, classRequestConfig.retry());
-        Integer methodRetry = methodRequestConfig == null ? RequestConfig.Default.RETRY
+        Integer methodRetry = methodRequestConfig == null ? RequestDefault.RETRY
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.RETRY, methodRequestConfig.retry());
-        methodOptions.setRetry(notDef(methodRetry, RequestConfig.Default.RETRY, classRetry));
+        methodOptions.setRetry(notDef(methodRetry, RequestDefault.RETRY, classRetry));
     }
 
     public static <T> T notDef(T obj, T def, T desc) {

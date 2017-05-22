@@ -8,14 +8,14 @@ import java.util.Map;
 import com.yiwugou.homer.core.enums.MethodEnum;
 import com.yiwugou.homer.core.util.AssertUtils;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-@AllArgsConstructor
+@Builder
 public class Request {
     @Getter
     private final MethodEnum method;
@@ -30,7 +30,7 @@ public class Request {
     @Getter
     private final int readTimeout;
 
-    public void addHeaders(String name, String... values) {
+    public Request addHeaders(String name, String... values) {
         AssertUtils.notNull(name, "header name");
         if (values == null || values.length == 0) {
             this.headers.remove(name);
@@ -38,6 +38,7 @@ public class Request {
             List<String> list = new ArrayList<>(Arrays.asList(values));
             this.headers.put(name, list);
         }
+        return this;
     }
 
 }

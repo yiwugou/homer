@@ -34,6 +34,11 @@ public class HomerCoreTest {
         while (index-- > 0) {
             String after = this.demoService.foo();
             System.err.println(after);
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -42,18 +47,24 @@ public class HomerCoreTest {
                 .build(DemoService.class);
     }
 
+    /**
+     * main
+     * 
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         HomerCoreTest test = new HomerCoreTest();
         test.init();
         long start = System.currentTimeMillis();
-        for (int i = 1; i <= 100; i++) {
-            new Thread() {
-                @Override
-                public void run() {
-                    test.loadBalanceTest();
-                }
-            }.start();
-        }
+        // for (int i = 1; i <= 100; i++) {
+        // new Thread() {
+        // @Override
+        // public void run() {
+        test.loadBalanceTest();
+        // }
+        // }.start();
+        // }
         test.loadBalanceTest();
         System.err.println("running time:" + (System.currentTimeMillis() - start));
     }

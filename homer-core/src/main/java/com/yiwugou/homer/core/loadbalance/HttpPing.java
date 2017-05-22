@@ -1,12 +1,10 @@
 package com.yiwugou.homer.core.loadbalance;
 
-import java.io.IOException;
-
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.Server;
-import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.client.Client;
+import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.enums.MethodEnum;
 
 public class HttpPing implements Ping {
@@ -18,12 +16,13 @@ public class HttpPing implements Ping {
 
     @Override
     public boolean isAlive(Server server) {
-        Request request = new Request(MethodEnum.GET, server.getHostPort(), null, null,
-                RequestConfig.Default.CONNECT_TIMEOUT, RequestConfig.Default.READ_TIMEOUT);
+        Request request = Request.builder().method(MethodEnum.GET).url(server.getHostPort())
+                .connectTimeout(RequestDefault.CONNECT_TIMEOUT).readTimeout(RequestDefault.READ_TIMEOUT)
+                .build();
         try {
             Response response = this.client.execute(request);
-            return response.getCode() == 200;
-        } catch (IOException e) {
+            return response != null;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
