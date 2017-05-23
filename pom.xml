@@ -9,6 +9,7 @@
         <module>homer-core</module>
         <module>homer-spring</module>
         <module>homer-fastjson</module>
+        <module>homer-eureka</module>
     </modules>
 
     <properties>

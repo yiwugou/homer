@@ -11,6 +11,7 @@ import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.codec.Decoder;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.factory.InstanceCreater;
 import com.yiwugou.homer.core.factory.MethodHandlerFactory;
 import com.yiwugou.homer.core.factory.MethodOptionsFactory;
 import com.yiwugou.homer.core.filter.Filter;
@@ -28,20 +29,20 @@ public class ProxyInvocationHandler implements InvocationHandler {
     private List<Filter> filters;
     private List<RequestInterceptor> requestInterceptors;
     private Decoder decoder;
-
+    private InstanceCreater instanceCreater;
     private final Map<Method, MethodHandler> methodHandlerMap = new ConcurrentHashMap<>();
 
     private final Map<Method, MethodOptions> methodOptionsMap = new ConcurrentHashMap<>();
 
-    public ProxyInvocationHandler(Class<?> clazz, Client client, ConfigLoader configLoader, List<Filter> filters,
-            List<RequestInterceptor> requestInterceptors, Decoder decoder) {
+    public ProxyInvocationHandler(Class<?> clazz, Homer homer) {
         super();
         this.clazz = clazz;
-        this.client = client;
-        this.configLoader = configLoader;
-        this.filters = filters;
-        this.requestInterceptors = requestInterceptors;
-        this.decoder = decoder;
+        this.client = homer.getClient();
+        this.configLoader = homer.getConfigLoader();
+        this.filters = homer.getFilters();
+        this.requestInterceptors = homer.getRequestInterceptors();
+        this.decoder = homer.getDecoder();
+        this.instanceCreater = homer.getInstanceCreater();
         this.initDefaultRequestInterceptors();
     }
 
@@ -58,12 +59,14 @@ public class ProxyInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (this.methodOptionsMap.get(method) == null) {
-            this.methodOptionsMap.put(method, new MethodOptionsFactory(method, this.configLoader).create());
+            this.methodOptionsMap.put(method,
+                    new MethodOptionsFactory(method, this.configLoader).create(this.instanceCreater));
         }
 
         if (this.methodHandlerMap.get(method) == null) {
-            this.methodHandlerMap.put(method, new MethodHandlerFactory(this.client, method,
-                    this.methodOptionsMap.get(method), this.requestInterceptors, this.decoder).create());
+            this.methodHandlerMap.put(method,
+                    new MethodHandlerFactory(this.client, method, this.methodOptionsMap.get(method),
+                            this.requestInterceptors, this.decoder, this.instanceCreater).create());
         }
 
         Invoker invoker = this.buildFilterChain(

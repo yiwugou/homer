@@ -47,13 +47,13 @@ public class HomerBeanScanner extends ClassPathBeanDefinitionScanner {
                 String beanClassName = definition.getBeanClassName();
                 Class<?> clazz = Class.forName(beanClassName);
 
-                Homer homer = Homer.instance().setDecoder(new FastjsonDecoder());
+                Homer.Builder homerBuilder = Homer.builder().decoder(new FastjsonDecoder());
                 if (this.properties != null) {
                     ConfigLoader configLoader = new PropertiesConfigLoader(this.properties);
-                    homer.setConfigLoader(configLoader);
+                    homerBuilder.configLoader(configLoader);
                 }
 
-                Object obj = homer.build(clazz);
+                Object obj = homerBuilder.build().proxy(clazz);
                 definition.setBeanClass(HomerFactoryBean.class);
                 definition.getPropertyValues().addPropertyValue("mapperInterface", clazz);
                 definition.getPropertyValues().addPropertyValue("object", obj);

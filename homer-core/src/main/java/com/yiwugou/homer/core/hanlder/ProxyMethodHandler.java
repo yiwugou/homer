@@ -13,8 +13,6 @@ import com.yiwugou.homer.core.exception.ResponseException;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.factory.RequestFactory;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
-import com.yiwugou.homer.core.loadbalance.DefaultServerCheck;
-import com.yiwugou.homer.core.loadbalance.ServerCheck;
 
 import lombok.AllArgsConstructor;
 
@@ -27,13 +25,11 @@ public class ProxyMethodHandler implements MethodHandler {
     private List<RequestInterceptor> requestInterceptors;
     private Decoder decoder;
 
-    private final ServerCheck serverCheck = new DefaultServerCheck();
-
     @Override
     public Object invoke(Object[] args) throws Throwable {
         while (true) {
-            Server server = this.methodOptions.getLoadBalance().choose(this.methodOptions.getUpServers(), this.method,
-                    args);
+            Server server = this.methodOptions.getLoadBalance()
+                    .choose(this.methodOptions.getServerHandler().getUpServers(), this.method, args);
             if (server == null) {
                 throw new ServerException("no server is available");
             }
@@ -45,10 +41,10 @@ public class ProxyMethodHandler implements MethodHandler {
                     }
                 }
                 Object obj = this.executeAndDecode(request);
-                this.serverCheck.serverUp(server, this.methodOptions);
+                this.methodOptions.getServerHandler().getServerCheck().serverUp(server);
                 return obj;
             } catch (Exception e) {
-                this.serverCheck.serverDown(server, this.methodOptions, e);
+                this.methodOptions.getServerHandler().getServerCheck().serverDown(server, e);
             }
         }
 

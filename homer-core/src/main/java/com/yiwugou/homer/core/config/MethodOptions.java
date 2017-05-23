@@ -1,27 +1,14 @@
 package com.yiwugou.homer.core.config;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
+import com.yiwugou.homer.core.server.ServerHandler;
 
 import lombok.Data;
 
 @Data
 public class MethodOptions {
-
-    /**
-     * package.class.method.url 可用的Server
-     */
-    private List<Server> upServers = new CopyOnWriteArrayList<>();
-
-    /**
-     * 不可用的server
-     */
-    private List<Server> downServers = new CopyOnWriteArrayList<>();
-
+    private ServerHandler serverHandler;
     /**
      * 重试次数
      */
@@ -52,7 +39,13 @@ public class MethodOptions {
      */
     private LoadBalance loadBalance;
 
+    /**
+     * 毫秒
+     */
     private Integer connectTimeout = RequestDefault.CONNECT_TIMEOUT;
 
+    /**
+     * 毫秒
+     */
     private Integer readTimeout = RequestDefault.READ_TIMEOUT;
 }

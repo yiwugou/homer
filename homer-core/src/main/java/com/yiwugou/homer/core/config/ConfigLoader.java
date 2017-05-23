@@ -9,6 +9,7 @@ public interface ConfigLoader {
     <T> T loader(String key, T defaultValue);
 
     static final String URL = ".url";
+    static final String EUREKA_SERVICE_ID = ".eurekaServiceId";
     static final String RETRY = ".retry";
     static final String EXECUTE = ".execute";
     static final String MOCK = ".mock";

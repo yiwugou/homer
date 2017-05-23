@@ -2,14 +2,12 @@ package com.yiwugou.homer.core.factory;
 
 import java.lang.reflect.Method;
 
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.MethodOptions;
-import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.constant.RequestDefault;
-import com.yiwugou.homer.core.util.CommonUtils;
+import com.yiwugou.homer.core.server.ServerHandler;
 
 public class MethodOptionsFactory {
     private Class<?> clazz;
@@ -29,15 +27,12 @@ public class MethodOptionsFactory {
         this.classMethodName = this.className + "." + this.methodName;
     }
 
-    public MethodOptions create() {
-        RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
+    public MethodOptions create(InstanceCreater instanceCreater) {
         RequestConfig classRequestConfig = this.clazz.getAnnotation(RequestConfig.class);
 
         MethodOptions methodOptions = new MethodOptions();
 
         RequestConfig methodRequestConfig = this.method.getAnnotation(RequestConfig.class);
-
-        this.initServers(requestUrl, methodOptions);
 
         this.initRetry(classRequestConfig, methodOptions, methodRequestConfig);
 
@@ -51,6 +46,9 @@ public class MethodOptionsFactory {
 
         this.initLoadBalance(classRequestConfig, methodOptions, methodRequestConfig);
 
+        RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
+        ServerHandler serverHandler = instanceCreater.createServerHandler(requestUrl, this.clazz, this.configLoader);
+        methodOptions.setServerHandler(serverHandler);
         return methodOptions;
     }
 
@@ -100,25 +98,6 @@ public class MethodOptionsFactory {
         Integer methodExecute = methodRequestConfig == null ? RequestDefault.EXECUTE
                 : this.configLoader.loader(this.classMethodName + ConfigLoader.EXECUTE, methodRequestConfig.execute());
         methodOptions.setExecute(notDef(methodExecute, RequestDefault.EXECUTE, classExecute));
-    }
-
-    private void initServers(RequestUrl requestUrl, MethodOptions methodOptions) {
-        String[] requestUrls = requestUrl.value();
-        String url = this.configLoader.loader(this.className + ConfigLoader.URL,
-                CommonUtils.joinToString(Constants.URL_SEPARATOR, requestUrls));
-
-        String urls[] = url.split(Constants.URL_SEPARATOR);
-        Server server = null;
-
-        for (String u : urls) {
-            if (CommonUtils.hasTest(u)) {
-                if (u.endsWith("/")) {
-                    u = u.substring(0, u.length() - 1);
-                }
-                server = new Server(u);
-                methodOptions.getUpServers().add(server);
-            }
-        }
     }
 
     private void initRetry(RequestConfig classRequestConfig, MethodOptions methodOptions,

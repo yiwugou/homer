@@ -24,6 +24,7 @@ public class MethodHandlerFactory {
     private MethodOptions methodOptions;
     private List<RequestInterceptor> requestInterceptors;
     private Decoder decoder;
+    private InstanceCreater instanceCreater;
 
     public MethodHandler create() {
         if ("equals".equals(this.method.getName())) {

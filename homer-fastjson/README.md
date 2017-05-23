@@ -4,7 +4,7 @@
 
 ```java
 
-FooService fooService = Homer.instance().setDecoder(new FastjsonDecoder()).build(FooService.class);
+FooService fooService = Homer.builder().decoder(new FastjsonDecoder()).proxy(FooService.class);
 
 ```
 

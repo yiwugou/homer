@@ -4,16 +4,11 @@ import java.util.Properties;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class PropertiesConfigLoader implements ConfigLoader {
 
-    @Setter(AccessLevel.PROTECTED)
     private Properties properties;
 
     @Override

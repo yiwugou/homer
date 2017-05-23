@@ -12,6 +12,8 @@ import com.yiwugou.homer.core.codec.Decoder;
 import com.yiwugou.homer.core.codec.DefaultDecoder;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.NoneConfigLoader;
+import com.yiwugou.homer.core.factory.DefaultInstanceCreater;
+import com.yiwugou.homer.core.factory.InstanceCreater;
 import com.yiwugou.homer.core.filter.ActiveFilter;
 import com.yiwugou.homer.core.filter.CacheFilter;
 import com.yiwugou.homer.core.filter.ExecuteFilter;
@@ -21,54 +23,115 @@ import com.yiwugou.homer.core.filter.cache.FilterCache;
 import com.yiwugou.homer.core.filter.cache.JvmFilterCache;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import lombok.Getter;
 
-@Accessors(chain = true)
 public final class Homer {
-    public static Homer instance() {
-        return new Homer();
+
+    @Getter
+    private Client client;
+    @Getter
+    private ConfigLoader configLoader;
+    @Getter
+    private FilterCache filterCache;
+    @Getter
+    private Decoder decoder;
+    @Getter
+    private InstanceCreater instanceCreater;
+    @Getter
+    private List<Filter> filters;
+    @Getter
+    private List<RequestInterceptor> requestInterceptors;
+
+    protected Homer(Client client, ConfigLoader configLoader, FilterCache filterCache, Decoder decoder,
+            InstanceCreater instanceCreater, List<Filter> filters, List<RequestInterceptor> requestInterceptors) {
+        this.client = client;
+        this.configLoader = configLoader;
+        this.filterCache = filterCache;
+        this.decoder = decoder;
+        this.instanceCreater = instanceCreater;
+        this.filters = filters;
+        this.requestInterceptors = requestInterceptors;
     }
 
-    @Setter
-    private Client client = new HttpClient();
-    @Setter
-    private ConfigLoader configLoader = new NoneConfigLoader();
-    @Setter
-    private FilterCache filterCache = new JvmFilterCache();
-    @Setter
-    private Decoder decoder = new DefaultDecoder();
-
-    private List<Filter> filters = new LinkedList<>();
-
-    private List<RequestInterceptor> requestInterceptors = new ArrayList<>();
-
-    public Homer addFilter(int index, Filter filter) {
-        this.filters.add(index, filter);
-        return this;
-    }
-
-    public Homer addFilter(Filter filter) {
-        this.filters.add(filter);
-        return this;
-    }
-
-    public Homer addRequestInterceptor(RequestInterceptor requestInterceptor) {
-        this.requestInterceptors.add(requestInterceptor);
-        return this;
-    }
-
-    private void addDefaultFilters() {
-        this.addFilter(0, new ExecuteFilter()).addFilter(0, new ActiveFilter())
-                .addFilter(0, new CacheFilter(this.filterCache)).addFilter(0, new MockFilter());
-    }
-
-    public <T> T build(Class<T> clazz) {
-        this.addDefaultFilters();
-        InvocationHandler invocationHandler = new ProxyInvocationHandler(clazz, this.client, this.configLoader,
-                this.filters, this.requestInterceptors, this.decoder);
+    public <T> T proxy(Class<T> clazz) {
+        InvocationHandler invocationHandler = new ProxyInvocationHandler(clazz, this);
         T proxy = (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[] { clazz }, invocationHandler);
         return proxy;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Client client = new HttpClient();
+
+        private ConfigLoader configLoader = new NoneConfigLoader();
+
+        private FilterCache filterCache = new JvmFilterCache();
+
+        private Decoder decoder = new DefaultDecoder();
+
+        private InstanceCreater instanceCreater = new DefaultInstanceCreater();
+
+        private List<Filter> filters = new LinkedList<>();
+
+        private List<RequestInterceptor> requestInterceptors = new ArrayList<>();
+
+        public Builder client(Client client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder configLoader(ConfigLoader configLoader) {
+            this.configLoader = configLoader;
+            return this;
+        }
+
+        public Builder filterCache(FilterCache filterCache) {
+            this.filterCache = filterCache;
+            return this;
+        }
+
+        public Builder decoder(Decoder decoder) {
+            this.decoder = decoder;
+            return this;
+        }
+
+        public Builder instanceCreater(InstanceCreater instanceCreater) {
+            this.instanceCreater = instanceCreater;
+            return this;
+        }
+
+        public Builder addFilter(int index, Filter filter) {
+            this.filters.add(index, filter);
+            return this;
+        }
+
+        public Builder addFilter(Filter filter) {
+            this.filters.add(filter);
+            return this;
+        }
+
+        public Builder addRequestInterceptor(RequestInterceptor requestInterceptor) {
+            this.requestInterceptors.add(requestInterceptor);
+            return this;
+        }
+
+        private void addDefaultFilters() {
+            this.addFilter(0, new ExecuteFilter()).addFilter(0, new ActiveFilter())
+                    .addFilter(0, new CacheFilter(this.filterCache)).addFilter(0, new MockFilter());
+        }
+
+        public <T> T proxy(Class<T> clazz) {
+            return this.build().proxy(clazz);
+        }
+
+        public Homer build() {
+            this.addDefaultFilters();
+            return new Homer(this.client, this.configLoader, this.filterCache, this.decoder, this.instanceCreater,
+                    this.filters, this.requestInterceptors);
+        }
     }
 
 }

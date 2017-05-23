@@ -21,7 +21,7 @@ public interface DemoService {
     String foo2Post(@RequestParam("username") String username, @RequestParam("password") String password);
 }
 
-DemoService demoService = Homer.instance().build(DemoService.class);
+DemoService demoService = Homer.builder().proxy(DemoService.class);
 
 ```
 

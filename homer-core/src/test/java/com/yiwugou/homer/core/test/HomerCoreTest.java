@@ -11,7 +11,7 @@ public class HomerCoreTest {
 
     @Before
     public void init() {
-        this.demoService = Homer.instance().build(DemoService.class);
+        this.demoService = Homer.builder().build().proxy(DemoService.class);
     }
 
     @Test
@@ -43,13 +43,13 @@ public class HomerCoreTest {
     }
 
     public void propertiesTest() {
-        DemoService demoService = Homer.instance().setConfigLoader(new PropertiesFileConfigLoader("homer.properties"))
-                .build(DemoService.class);
+        DemoService demoService = Homer.builder().configLoader(new PropertiesFileConfigLoader("homer.properties"))
+                .build().proxy(DemoService.class);
     }
 
     /**
      * main
-     * 
+     *
      * @param args
      * @throws Exception
      */
