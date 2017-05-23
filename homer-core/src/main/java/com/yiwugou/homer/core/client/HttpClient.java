@@ -26,7 +26,11 @@ public class HttpClient implements Client {
     }
 
     private HttpURLConnection convertAndSend(Request request) throws IOException {
-        final HttpURLConnection connection = (HttpURLConnection) new URL(request.getUrl()).openConnection();
+        String url = request.getUrl();
+        if (!url.startsWith("http")) {
+            url = "http://" + url;
+        }
+        final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 
         connection.setConnectTimeout(request.getConnectTimeout());
         connection.setReadTimeout(request.getReadTimeout());

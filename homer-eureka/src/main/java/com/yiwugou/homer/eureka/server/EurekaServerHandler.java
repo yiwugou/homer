@@ -1,8 +1,8 @@
 package com.yiwugou.homer.eureka.server;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.netflix.appinfo.ApplicationInfoManager;
@@ -27,9 +27,11 @@ public class EurekaServerHandler implements ServerHandler {
     @Getter
     private String serviceId;
     @Getter
-    private Map<Server, InstanceInfo> instanceInfoMap = new HashMap<>();
+    private Map<Server, InstanceInfo> instanceInfoMap = new ConcurrentHashMap<>();
     @Getter
     private ServerCheck serverCheck;
+
+    private List<Server> downServices = new CopyOnWriteArrayList<>();
 
     public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
         this.initServers(requestUrl, clazz, configLoader);
@@ -40,15 +42,21 @@ public class EurekaServerHandler implements ServerHandler {
     public List<Server> getUpServers() {
         List<InstanceInfo> ins = this.eurekaClient.getInstancesByVipAddress(this.serviceId, false);
         List<Server> servers = new CopyOnWriteArrayList<>();
-        Server server = null;
+
         for (InstanceInfo in : ins) {
-            String hostPort = in.getHostName() + ":" + in.getPort();
-            server = new Server(hostPort);
-            server.setAlive(true);
+            Server server = this.instanceInfoToServer(in);
             servers.add(server);
             this.instanceInfoMap.put(server, in);
         }
+        servers.removeAll(this.downServices);
         return servers;
+    }
+
+    private Server instanceInfoToServer(InstanceInfo instanceInfo) {
+        String hostPort = instanceInfo.getHostName() + ":" + instanceInfo.getPort();
+        Server server = new Server(hostPort);
+        server.setAlive(true);
+        return server;
     }
 
     private void initServers(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
@@ -59,7 +67,7 @@ public class EurekaServerHandler implements ServerHandler {
 
     @Override
     public List<Server> getDownServers() {
-        return null;
+        return this.downServices;
     }
 
     private void initEurekaClient() {

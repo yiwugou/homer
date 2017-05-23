@@ -1,7 +1,6 @@
 package com.yiwugou.homer.core.server;
 
 import com.yiwugou.homer.core.Server;
-import com.yiwugou.homer.core.exception.HomerException;
 
 public class DefaultServerCheck extends AbstractServerCheck {
 
@@ -15,7 +14,6 @@ public class DefaultServerCheck extends AbstractServerCheck {
     public void serverDown(Server downServer, Exception e) {
         this.down(downServer);
         this.loopIfDown(downServer);
-        throw new HomerException(e);
     }
 
     private void down(Server server) {

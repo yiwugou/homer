@@ -22,7 +22,7 @@ public class HttpPing implements Ping {
             Response response = this.client.execute(request);
             return response != null;
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return false;
     }
