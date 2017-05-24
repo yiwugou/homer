@@ -38,7 +38,7 @@ public interface BarService {
 }
 
 
-InputStream in = this.getClass().getClassLoader().getResourceAsStream("eureka-client.properties");
+InputStream in = this.getClass().getClassLoader().getResourceAsStream("homer-eureka.properties");
 Properties properties = new Properties();
 properties.load(in);
 CommonUtils.close(in);

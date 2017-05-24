@@ -34,7 +34,7 @@ public class Response {
     @Override
     public String toString() {
         return "Response [code=" + this.code + ", message=" + this.message + ", headers=" + this.headers + ", body="
-                + new String(this.body, Constants.UTF_8) + ", request=" + this.request + "]";
+                + this.body == null ? "''" : new String(this.body, Constants.UTF_8) + ", request=" + this.request + "]";
     }
 
 }

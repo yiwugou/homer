@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.enums.MethodEnum;
 import com.yiwugou.homer.core.util.AssertUtils;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  *
@@ -22,7 +22,6 @@ import lombok.ToString;
  * @since 2017年5月24日 上午10:31:44
  */
 @EqualsAndHashCode
-@ToString
 @Builder
 public class Request {
     @Getter
@@ -47,6 +46,13 @@ public class Request {
             this.headers.put(name, list);
         }
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Request [method=" + this.method + ", url=" + this.url + ", body=" + this.body == null ? "''"
+                : new String(this.body, Constants.UTF_8) + ", headers=" + this.headers + ", connectTimeout="
+                        + this.connectTimeout + ", readTimeout=" + this.readTimeout + "]";
     }
 
 }
