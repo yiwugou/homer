@@ -26,6 +26,7 @@ public class EurekaServerCheck extends AbstractServerCheck {
         // application.addInstance(in);
 
         server.setAlive(true);
+        server.initRetry();
         this.eurekaServerHandler.getDownServers().remove(server);
     }
 

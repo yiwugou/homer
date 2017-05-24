@@ -1,7 +1,9 @@
 package com.yiwugou.homer.eureka;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.netflix.appinfo.ApplicationInfoManager;
@@ -25,10 +27,10 @@ public class EurekaServerHandler implements ServerHandler {
     private String serviceId;
     @Getter
     private ServerCheck serverCheck;
-    // @Getter
-    // private Map<Server, InstanceInfo> instanceInfoMap = new
-    // ConcurrentHashMap<>();
-    private List<Server> downServices = new CopyOnWriteArrayList<>();
+    @Getter
+    private Map<Server, InstanceInfo> instanceInfoMap = new ConcurrentHashMap<>();
+    @Getter
+    private List<Server> downServers = new CopyOnWriteArrayList<>();
 
     public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader,
             Properties properties) {
@@ -47,7 +49,7 @@ public class EurekaServerHandler implements ServerHandler {
             servers.add(server);
             // this.instanceInfoMap.put(server, in);
         }
-        servers.removeAll(this.downServices);
+        servers.removeAll(this.downServers);
         return servers;
     }
 
@@ -61,11 +63,6 @@ public class EurekaServerHandler implements ServerHandler {
     private void initServers(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
         String[] serviceIds = requestUrl.value();
         this.serviceId = configLoader.loader(clazz.getName() + ConfigLoader.EUREKA_SERVICE_ID, serviceIds[0]);
-    }
-
-    @Override
-    public List<Server> getDownServers() {
-        return this.downServices;
     }
 
     private void initEurekaClient(Properties properties) {
