@@ -32,7 +32,8 @@ public class ProxyMethodHandler implements MethodHandler {
             Server server = this.methodOptions.getLoadBalance()
                     .choose(this.methodOptions.getServerHandler().getUpServers(), this.method, args);
             if (server == null) {
-                throw new ServerException("no server is available");
+                throw new ServerException("no server is available! down servers is "
+                        + this.methodOptions.getServerHandler().getDownServers());
             }
             try {
                 Request request = new RequestFactory(this.method, this.methodOptions, args, server).create();
@@ -48,10 +49,9 @@ public class ProxyMethodHandler implements MethodHandler {
                 this.methodOptions.getServerHandler().getServerCheck().serverDown(server, e);
             }
         }
-
     }
 
-    private Object executeAndDecode(Request request) throws Throwable {
+    private Object executeAndDecode(Request request) throws Exception {
         int retry = this.methodOptions.getRetry();
         while (true) {
             try {
