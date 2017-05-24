@@ -1,6 +1,16 @@
 
 # a rest client like [feign](https://github.com/OpenFeign/feign)
 
+default properties is eureka-client.properties
+
+```properties
+
+eureka.serviceUrl.default=http://127.0.0.1:8761/eureka
+
+
+```
+
+
 ```java
 
 @RequestUrl("ms-redis-service")

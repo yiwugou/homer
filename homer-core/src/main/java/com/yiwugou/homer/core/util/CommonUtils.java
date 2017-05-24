@@ -8,7 +8,16 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import com.yiwugou.homer.core.constant.Constants;
+
 public class CommonUtils {
+
+    public static String bytesToString(byte[] bs, String def) {
+        if (bs == null || bs.length == 0) {
+            return def;
+        }
+        return new String(bs, Constants.UTF_8);
+    }
 
     public static <T extends Object> boolean isEmpty(T[] objs) {
         return (objs == null || objs.length == 0);

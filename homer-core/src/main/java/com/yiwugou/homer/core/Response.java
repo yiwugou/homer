@@ -3,7 +3,7 @@ package com.yiwugou.homer.core;
 import java.util.List;
 import java.util.Map;
 
-import com.yiwugou.homer.core.constant.Constants;
+import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -34,7 +34,7 @@ public class Response {
     @Override
     public String toString() {
         return "Response [code=" + this.code + ", message=" + this.message + ", headers=" + this.headers + ", body="
-                + this.body == null ? "''" : new String(this.body, Constants.UTF_8) + ", request=" + this.request + "]";
+                + CommonUtils.bytesToString(this.body, null) + ", request=" + this.request + "]";
     }
 
 }
