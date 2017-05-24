@@ -1,6 +1,7 @@
 package com.yiwugou.homer.eureka;
 
-import com.yiwugou.homer.core.exception.ServerException;
+import java.io.IOException;
+
 import com.yiwugou.homer.core.server.AbstractServerCheck;
 import com.yiwugou.homer.core.server.Server;
 
@@ -31,7 +32,7 @@ public class EurekaServerCheck extends AbstractServerCheck {
     }
 
     @Override
-    public void serverDown(Server downServer, Exception e) {
+    public void serverDown(Server downServer, IOException e) {
         // InstanceInfo in =
         // this.eurekaServerHandler.getInstanceInfoMap().get(downServer);
         // Application application =
@@ -41,7 +42,6 @@ public class EurekaServerCheck extends AbstractServerCheck {
         downServer.setAlive(false);
         this.eurekaServerHandler.getDownServers().add(downServer);
         super.loopIfDown(downServer);
-        throw new ServerException(downServer.toString(), e);
     }
 
 }

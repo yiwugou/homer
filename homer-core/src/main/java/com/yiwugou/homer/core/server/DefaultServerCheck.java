@@ -1,5 +1,7 @@
 package com.yiwugou.homer.core.server;
 
+import java.io.IOException;
+
 public class DefaultServerCheck extends AbstractServerCheck {
 
     private ServerHandler serverHandler;
@@ -9,7 +11,7 @@ public class DefaultServerCheck extends AbstractServerCheck {
     }
 
     @Override
-    public void serverDown(Server downServer, Exception e) {
+    public void serverDown(Server downServer, IOException e) {
         this.down(downServer);
         this.loopIfDown(downServer);
     }

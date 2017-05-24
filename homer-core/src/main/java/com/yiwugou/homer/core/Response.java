@@ -3,10 +3,11 @@ package com.yiwugou.homer.core;
 import java.util.List;
 import java.util.Map;
 
+import com.yiwugou.homer.core.constant.Constants;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  *
@@ -17,7 +18,6 @@ import lombok.ToString;
  * @since 2017年5月24日 上午10:31:49
  */
 @EqualsAndHashCode
-@ToString
 @Builder
 public class Response {
     @Getter
@@ -30,5 +30,11 @@ public class Response {
     private final byte[] body;
     @Getter
     private final Request request;
+
+    @Override
+    public String toString() {
+        return "Response [code=" + this.code + ", message=" + this.message + ", headers=" + this.headers + ", body="
+                + new String(this.body, Constants.UTF_8) + ", request=" + this.request + "]";
+    }
 
 }

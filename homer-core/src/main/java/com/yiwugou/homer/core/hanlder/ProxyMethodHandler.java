@@ -1,5 +1,6 @@
 package com.yiwugou.homer.core.hanlder;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ProxyMethodHandler implements MethodHandler {
                 Object obj = this.executeAndDecode(request);
                 this.methodOptions.getServerHandler().getServerCheck().serverUp(server);
                 return obj;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 this.methodOptions.getServerHandler().getServerCheck().serverDown(server, e);
             }
         }
@@ -55,7 +56,7 @@ public class ProxyMethodHandler implements MethodHandler {
         while (true) {
             try {
                 Response response = this.client.execute(request);
-                if (response.getCode() > 400) {
+                if (response.getCode() >= 400) {
                     throw new ResponseException(response);
                 }
                 return this.decoder.decode(response, this.method.getReturnType());
