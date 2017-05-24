@@ -26,6 +26,7 @@ public abstract class AbstractServerCheck implements ServerCheck {
             public void run() {
                 boolean isAlive = AbstractServerCheck.this.ping.isAlive(downServer);
                 if (isAlive) {
+                    downServer.setAlive(true);
                     AbstractServerCheck.this.up(downServer);
                 } else {
                     AbstractServerCheck.this.loopIfDown(downServer);

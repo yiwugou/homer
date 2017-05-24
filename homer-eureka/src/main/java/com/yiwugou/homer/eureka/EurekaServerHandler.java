@@ -1,9 +1,7 @@
 package com.yiwugou.homer.eureka;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.netflix.appinfo.ApplicationInfoManager;
@@ -26,10 +24,10 @@ public class EurekaServerHandler implements ServerHandler {
     @Getter
     private String serviceId;
     @Getter
-    private Map<Server, InstanceInfo> instanceInfoMap = new ConcurrentHashMap<>();
-    @Getter
     private ServerCheck serverCheck;
-
+    // @Getter
+    // private Map<Server, InstanceInfo> instanceInfoMap = new
+    // ConcurrentHashMap<>();
     private List<Server> downServices = new CopyOnWriteArrayList<>();
 
     public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader,
@@ -47,7 +45,7 @@ public class EurekaServerHandler implements ServerHandler {
         for (InstanceInfo in : ins) {
             Server server = this.instanceInfoToServer(in);
             servers.add(server);
-            this.instanceInfoMap.put(server, in);
+            // this.instanceInfoMap.put(server, in);
         }
         servers.removeAll(this.downServices);
         return servers;
@@ -73,7 +71,7 @@ public class EurekaServerHandler implements ServerHandler {
     private void initEurekaClient(Properties properties) {
         DynamicProperty dynamicProperty = null;
         if (properties == null) {
-            dynamicProperty = new PropertiesFileDynamicProperty(Constants.DEFAULT_CONFIG_FILE);
+            dynamicProperty = new PropertiesFileDynamicProperty(EurekaConstants.DEFAULT_CONFIG_FILE);
         } else {
             dynamicProperty = new PropertiesDynamicProperty(properties);
         }

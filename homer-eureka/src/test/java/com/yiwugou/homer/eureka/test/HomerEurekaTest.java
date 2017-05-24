@@ -14,7 +14,7 @@ import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.EurekaClientConfig;
 import com.yiwugou.homer.core.Homer;
-import com.yiwugou.homer.eureka.Constants;
+import com.yiwugou.homer.eureka.EurekaConstants;
 import com.yiwugou.homer.eureka.DynamicProperty;
 import com.yiwugou.homer.eureka.EurekaInstanceCreater;
 import com.yiwugou.homer.eureka.HomerEurekaClientConfig;
@@ -63,7 +63,7 @@ public class HomerEurekaTest {
     @Test
     public void test1() {
         String vipAddress = "ms-redis-service";
-        DynamicProperty dynamicProperty = new PropertiesFileDynamicProperty(Constants.DEFAULT_CONFIG_FILE);
+        DynamicProperty dynamicProperty = new PropertiesFileDynamicProperty(EurekaConstants.DEFAULT_CONFIG_FILE);
         ApplicationInfoManager.OptionalArgs options = null;
         EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig(dynamicProperty);
         ApplicationInfoManager applicationInfoManager = new ApplicationInfoManager(instanceConfig, options);

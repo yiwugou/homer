@@ -12,7 +12,7 @@ public class HomerEurekaInstanceConfig extends AbstractInstanceConfig implements
     protected DynamicProperty dynamicProperty;
 
     public HomerEurekaInstanceConfig(DynamicProperty dynamicProperty) {
-        this(Constants.DEFAULT_CONFIG_NAMESPACE, dynamicProperty, new DataCenterInfo() {
+        this(EurekaConstants.DEFAULT_CONFIG_NAMESPACE, dynamicProperty, new DataCenterInfo() {
             @Override
             public Name getName() {
                 return Name.MyOwn;

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * @since 2017年5月11日 下午4:53:21
  */
-public class Constants {
+public class EurekaConstants {
 
     public static final Pattern COMMA_SPLIT_PATTERN = Pattern.compile("\\s*[,]+\\s*");
 
