@@ -22,6 +22,14 @@ import com.yiwugou.homer.core.invoker.DefaultInvoker;
 import com.yiwugou.homer.core.invoker.Invoker;
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * ProxyInvocationHandler
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年5月24日 上午10:31:33
+ */
 public class ProxyInvocationHandler implements InvocationHandler {
     private Class<?> clazz;
     private Client client;
@@ -60,7 +68,7 @@ public class ProxyInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (this.methodOptionsMap.get(method) == null) {
             this.methodOptionsMap.put(method,
-                    new MethodOptionsFactory(method, this.configLoader).create(this.instanceCreater));
+                    new MethodOptionsFactory(method, this.configLoader, this.instanceCreater).create());
         }
 
         if (this.methodHandlerMap.get(method) == null) {

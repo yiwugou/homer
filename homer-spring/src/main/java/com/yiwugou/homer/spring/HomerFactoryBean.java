@@ -4,6 +4,14 @@ import org.springframework.beans.factory.FactoryBean;
 
 import lombok.Setter;
 
+/**
+ *
+ * HomerFactoryBean
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月24日 上午10:29:25
+ */
 public class HomerFactoryBean<T> implements FactoryBean<T> {
 
     @Setter

@@ -18,6 +18,14 @@ import org.springframework.util.StringUtils;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.constant.Constants;
 
+/**
+ *
+ * HomerScanBean
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月24日 上午10:29:30
+ */
 public class HomerScanBean implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
     private Properties properties;
     private String[] packages;

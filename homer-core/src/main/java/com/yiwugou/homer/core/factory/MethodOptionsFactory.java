@@ -13,21 +13,23 @@ public class MethodOptionsFactory {
     private Class<?> clazz;
     private Method method;
     private ConfigLoader configLoader;
+    private InstanceCreater instanceCreater;
 
     private String className;
     private String methodName;
     private String classMethodName;
 
-    public MethodOptionsFactory(Method method, ConfigLoader configLoader) {
+    public MethodOptionsFactory(Method method, ConfigLoader configLoader, InstanceCreater instanceCreater) {
         this.method = method;
         this.configLoader = configLoader;
+        this.instanceCreater = instanceCreater;
         this.clazz = method.getDeclaringClass();
         this.className = this.clazz.getName();
         this.methodName = this.method.getName();
         this.classMethodName = this.className + "." + this.methodName;
     }
 
-    public MethodOptions create(InstanceCreater instanceCreater) {
+    public MethodOptions create() {
         RequestConfig classRequestConfig = this.clazz.getAnnotation(RequestConfig.class);
 
         MethodOptions methodOptions = new MethodOptions();
@@ -47,7 +49,8 @@ public class MethodOptionsFactory {
         this.initLoadBalance(classRequestConfig, methodOptions, methodRequestConfig);
 
         RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
-        ServerHandler serverHandler = instanceCreater.createServerHandler(requestUrl, this.clazz, this.configLoader);
+        ServerHandler serverHandler = this.instanceCreater.createServerHandler(requestUrl, this.clazz,
+                this.configLoader);
         methodOptions.setServerHandler(serverHandler);
         return methodOptions;
     }

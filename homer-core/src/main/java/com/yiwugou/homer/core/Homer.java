@@ -25,24 +25,32 @@ import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
 import lombok.Getter;
 
+/**
+ *
+ * Homer
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年5月24日 上午10:30:41
+ */
 public final class Homer {
 
     @Getter
-    private Client client;
+    private final Client client;
     @Getter
-    private ConfigLoader configLoader;
+    private final ConfigLoader configLoader;
     @Getter
-    private FilterCache filterCache;
+    private final FilterCache filterCache;
     @Getter
-    private Decoder decoder;
+    private final Decoder decoder;
     @Getter
-    private InstanceCreater instanceCreater;
+    private final InstanceCreater instanceCreater;
     @Getter
-    private List<Filter> filters;
+    private final List<Filter> filters;
     @Getter
-    private List<RequestInterceptor> requestInterceptors;
+    private final List<RequestInterceptor> requestInterceptors;
 
-    protected Homer(Client client, ConfigLoader configLoader, FilterCache filterCache, Decoder decoder,
+    private Homer(Client client, ConfigLoader configLoader, FilterCache filterCache, Decoder decoder,
             InstanceCreater instanceCreater, List<Filter> filters, List<RequestInterceptor> requestInterceptors) {
         this.client = client;
         this.configLoader = configLoader;

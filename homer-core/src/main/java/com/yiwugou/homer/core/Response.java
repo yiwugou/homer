@@ -8,6 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ *
+ * Response
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年5月24日 上午10:31:49
+ */
 @EqualsAndHashCode
 @ToString
 @Builder

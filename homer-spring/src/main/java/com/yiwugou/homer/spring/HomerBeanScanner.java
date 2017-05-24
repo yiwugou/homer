@@ -18,11 +18,11 @@ import lombok.Setter;
 
 /**
  *
- * FeignClientScanner
+ * HomerBeanScanner
  *
  * @author zhanxiaoyong
  *
- * @since 2017年5月11日 下午4:54:37
+ * @since 2017年5月24日 上午10:29:20
  */
 public class HomerBeanScanner extends ClassPathBeanDefinitionScanner {
 
