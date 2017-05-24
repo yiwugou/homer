@@ -44,7 +44,7 @@ public class HomerCoreTest {
         System.err.println("test1 success!");
     }
 
-    @Test
+    // @Test
     public void loadBalanceTest() {
         int index = 100000000;
         while (index-- > 0) {

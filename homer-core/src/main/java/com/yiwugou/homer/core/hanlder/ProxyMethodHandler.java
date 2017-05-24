@@ -59,7 +59,7 @@ public class ProxyMethodHandler implements MethodHandler {
                 if (response.getCode() >= 400) {
                     throw new ResponseException(response);
                 }
-                return this.decoder.decode(response, this.method.getReturnType());
+                return this.decoder.decode(response, this.method.getGenericReturnType());
             } catch (Exception e) {
                 if (--retry < 0) {
                     throw e;

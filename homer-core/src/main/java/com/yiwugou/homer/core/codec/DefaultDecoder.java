@@ -1,5 +1,7 @@
 package com.yiwugou.homer.core.codec;
 
+import java.lang.reflect.Type;
+
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.DecoderException;
@@ -8,7 +10,7 @@ import com.yiwugou.homer.core.util.CommonUtils;
 public class DefaultDecoder implements Decoder {
 
     @Override
-    public Object decode(Response response, Class<?> returnType) {
+    public Object decode(Response response, Type returnType) {
         byte[] body = response.getBody();
         if (body == null || body.length == 0) {
             return null;

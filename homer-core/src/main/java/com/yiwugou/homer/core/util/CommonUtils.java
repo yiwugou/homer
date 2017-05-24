@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 
 import com.yiwugou.homer.core.constant.Constants;
 
@@ -61,7 +62,7 @@ public class CommonUtils {
         return (int) count;
     }
 
-    public static Object stringToBasic(String str, Class<?> type) {
+    public static Object stringToBasic(String str, Type type) {
         if (!CommonUtils.hasTest(str)) {
             return null;
         }
@@ -81,7 +82,7 @@ public class CommonUtils {
             return Boolean.valueOf(str);
         }
         throw new IllegalArgumentException(
-                "type is " + type + ", can not cast to String, Long, Integer, Double, Float, Short !");
+                "type is " + type + ", can not cast to String, Long, Integer, Double, Float, Short, Boolean !");
     }
 
     public static String joinToString(String separator, Object[] objs) {

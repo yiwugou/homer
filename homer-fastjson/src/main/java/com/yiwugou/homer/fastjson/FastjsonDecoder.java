@@ -1,5 +1,7 @@
 package com.yiwugou.homer.fastjson;
 
+import java.lang.reflect.Type;
+
 import com.alibaba.fastjson.JSONObject;
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.codec.Decoder;
@@ -7,9 +9,10 @@ import com.yiwugou.homer.core.codec.Decoder;
 public class FastjsonDecoder implements Decoder {
 
     @Override
-    public Object decode(Response response, Class<?> returnType) {
+    public Object decode(Response response, Type returnType) {
         byte[] bs = response.getBody();
-        return JSONObject.parseObject(bs, returnType);
+        Object obj = JSONObject.parseObject(bs, returnType);
+        return obj;
     }
 
 }

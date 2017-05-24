@@ -16,11 +16,9 @@ public interface DemoService {
     String foo();
 
     @RequestMapping(value = "foo1/{username}/{password}", method = MethodEnum.GET)
-
     String foo1(@RequestParam("username") String username, @RequestParam("password") String password);
 
     @RequestMapping(value = "foo2", method = MethodEnum.GET)
-
     String foo2Get(@RequestParam("username") String username, @RequestParam("password") String password);
 
     @RequestMapping(value = "foo2", method = MethodEnum.POST)
