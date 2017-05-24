@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.yiwugou</groupId>
         <artifactId>homer</artifactId>
-        <version>${project.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>homer-core</artifactId>
 

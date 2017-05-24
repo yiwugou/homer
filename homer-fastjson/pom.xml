@@ -3,14 +3,14 @@
     <parent>
         <groupId>com.yiwugou</groupId>
         <artifactId>homer</artifactId>
-        <version>${project.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>homer-fastjson</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.yiwugou</groupId>
             <artifactId>homer-core</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

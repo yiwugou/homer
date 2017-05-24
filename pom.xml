@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.yiwugou</groupId>
     <artifactId>homer</artifactId>
-    <version>${project.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
 
-        <project.version>1.0.0-SNAPSHOT</project.version>
+        <homer.version>1.0.0-SNAPSHOT</homer.version>
 
         <lombok.version>1.16.16</lombok.version>
         <guava.version>19.0</guava.version>
