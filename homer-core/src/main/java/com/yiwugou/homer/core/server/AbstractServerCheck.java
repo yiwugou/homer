@@ -14,22 +14,20 @@ public abstract class AbstractServerCheck implements ServerCheck {
 
     protected abstract void up(Server server);
 
-    protected void loopIfDown(final Server downServer) {
+    protected void loopPing(final Server downServer) {
         long delay = (long) (Math.pow(1.5, downServer.getRetry()) * 10);
         if (delay > 3600) {
             delay = 3600;
-        } else {
-            downServer.addRetry();
         }
+        downServer.addRetry();
         this.EXECUTOR.schedule(new Runnable() {
             @Override
             public void run() {
                 boolean isAlive = AbstractServerCheck.this.ping.isAlive(downServer);
                 if (isAlive) {
-                    downServer.setAlive(true);
                     AbstractServerCheck.this.up(downServer);
                 } else {
-                    AbstractServerCheck.this.loopIfDown(downServer);
+                    AbstractServerCheck.this.loopPing(downServer);
                 }
             }
         }, delay, TimeUnit.SECONDS);

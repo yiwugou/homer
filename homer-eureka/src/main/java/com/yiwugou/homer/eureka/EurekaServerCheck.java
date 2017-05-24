@@ -41,7 +41,7 @@ public class EurekaServerCheck extends AbstractServerCheck {
 
         downServer.setAlive(false);
         this.eurekaServerHandler.getDownServers().add(downServer);
-        super.loopIfDown(downServer);
+        super.loopPing(downServer);
     }
 
 }

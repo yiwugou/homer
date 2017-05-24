@@ -9,6 +9,22 @@ import com.yiwugou.homer.core.config.PropertiesFileConfigLoader;
 public class HomerCoreTest {
     private DemoService demoService;
 
+    public static void main(String[] args) throws Exception {
+        HomerCoreTest test = new HomerCoreTest();
+        test.init();
+        long start = System.currentTimeMillis();
+        // for (int i = 1; i <= 100; i++) {
+        // new Thread() {
+        // @Override
+        // public void run() {
+        test.loadBalanceTest();
+        // }
+        // }.start();
+        // }
+        test.loadBalanceTest();
+        System.err.println("running time:" + (System.currentTimeMillis() - start));
+    }
+
     @Before
     public void init() {
         this.demoService = Homer.builder().build().proxy(DemoService.class);
@@ -30,7 +46,7 @@ public class HomerCoreTest {
 
     @Test
     public void loadBalanceTest() {
-        int index = 10000;
+        int index = 100000000;
         while (index-- > 0) {
             String after = this.demoService.foo();
             System.err.println(after);
@@ -45,28 +61,6 @@ public class HomerCoreTest {
     public void propertiesTest() {
         DemoService demoService = Homer.builder().configLoader(new PropertiesFileConfigLoader("homer.properties"))
                 .build().proxy(DemoService.class);
-    }
-
-    /**
-     * main
-     *
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        HomerCoreTest test = new HomerCoreTest();
-        test.init();
-        long start = System.currentTimeMillis();
-        // for (int i = 1; i <= 100; i++) {
-        // new Thread() {
-        // @Override
-        // public void run() {
-        test.loadBalanceTest();
-        // }
-        // }.start();
-        // }
-        test.loadBalanceTest();
-        System.err.println("running time:" + (System.currentTimeMillis() - start));
     }
 
 }

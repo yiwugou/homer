@@ -13,7 +13,7 @@ public class DefaultServerCheck extends AbstractServerCheck {
     @Override
     public void serverDown(Server downServer, IOException e) {
         this.down(downServer);
-        this.loopIfDown(downServer);
+        this.loopPing(downServer);
     }
 
     private void down(Server server) {
