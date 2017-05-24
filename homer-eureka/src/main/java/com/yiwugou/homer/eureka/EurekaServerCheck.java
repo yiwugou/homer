@@ -1,10 +1,10 @@
-package com.yiwugou.homer.eureka.server;
+package com.yiwugou.homer.eureka;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.shared.Application;
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.server.AbstractServerCheck;
+import com.yiwugou.homer.core.server.Server;
 
 public class EurekaServerCheck extends AbstractServerCheck {
 

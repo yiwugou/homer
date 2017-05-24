@@ -1,4 +1,4 @@
-package com.yiwugou.homer.core;
+package com.yiwugou.homer.core.server;
 
 import lombok.Getter;
 import lombok.Setter;

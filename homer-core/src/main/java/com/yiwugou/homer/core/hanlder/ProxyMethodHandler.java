@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.codec.Decoder;
 import com.yiwugou.homer.core.config.MethodOptions;
@@ -13,6 +12,7 @@ import com.yiwugou.homer.core.exception.ResponseException;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.factory.RequestFactory;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
+import com.yiwugou.homer.core.server.Server;
 
 import lombok.AllArgsConstructor;
 

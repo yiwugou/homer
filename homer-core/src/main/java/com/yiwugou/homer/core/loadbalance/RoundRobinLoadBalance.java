@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.yiwugou.homer.core.Server;
+import com.yiwugou.homer.core.server.Server;
 
 public class RoundRobinLoadBalance implements LoadBalance {
     private AtomicInteger CYCLIC = new AtomicInteger(0);

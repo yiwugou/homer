@@ -1,7 +1,8 @@
-package com.yiwugou.homer.eureka.server;
+package com.yiwugou.homer.eureka;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -11,13 +12,11 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.EurekaClientConfig;
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
+import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.server.ServerCheck;
 import com.yiwugou.homer.core.server.ServerHandler;
-import com.yiwugou.homer.eureka.HomerEurekaClientConfig;
-import com.yiwugou.homer.eureka.HomerEurekaInstanceConfig;
 
 import lombok.Getter;
 
@@ -33,8 +32,10 @@ public class EurekaServerHandler implements ServerHandler {
 
     private List<Server> downServices = new CopyOnWriteArrayList<>();
 
-    public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
+    public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader,
+            Properties properties) {
         this.initServers(requestUrl, clazz, configLoader);
+        this.initEurekaClient(properties);
         this.serverCheck = new EurekaServerCheck(this);
     }
 
@@ -62,7 +63,6 @@ public class EurekaServerHandler implements ServerHandler {
     private void initServers(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
         String[] serviceIds = requestUrl.value();
         this.serviceId = configLoader.loader(clazz.getName() + ConfigLoader.EUREKA_SERVICE_ID, serviceIds[0]);
-        this.initEurekaClient();
     }
 
     @Override
@@ -70,11 +70,18 @@ public class EurekaServerHandler implements ServerHandler {
         return this.downServices;
     }
 
-    private void initEurekaClient() {
+    private void initEurekaClient(Properties properties) {
+        DynamicProperty dynamicProperty = null;
+        if (properties == null) {
+            dynamicProperty = new PropertiesFileDynamicProperty(Constants.DEFAULT_CONFIG_FILE);
+        } else {
+            dynamicProperty = new PropertiesDynamicProperty(properties);
+        }
+
         ApplicationInfoManager.OptionalArgs options = null;
-        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig();
+        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig(dynamicProperty);
         ApplicationInfoManager applicationInfoManager = new ApplicationInfoManager(instanceConfig, options);
-        EurekaClientConfig clientConfig = new HomerEurekaClientConfig();
+        EurekaClientConfig clientConfig = new HomerEurekaClientConfig(dynamicProperty);
         this.eurekaClient = new DiscoveryClient(applicationInfoManager, clientConfig);
     }
 

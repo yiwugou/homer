@@ -11,12 +11,8 @@ public class HomerEurekaInstanceConfig extends AbstractInstanceConfig implements
 
     protected DynamicProperty dynamicProperty;
 
-    public HomerEurekaInstanceConfig() {
-        this(Constants.DEFAULT_CONFIG_NAMESPACE, Constants.DEFAULT_CONFIG_FILE);
-    }
-
-    public HomerEurekaInstanceConfig(String namespace, String configFile) {
-        this(namespace, configFile, new DataCenterInfo() {
+    public HomerEurekaInstanceConfig(DynamicProperty dynamicProperty) {
+        this(Constants.DEFAULT_CONFIG_NAMESPACE, dynamicProperty, new DataCenterInfo() {
             @Override
             public Name getName() {
                 return Name.MyOwn;
@@ -24,10 +20,19 @@ public class HomerEurekaInstanceConfig extends AbstractInstanceConfig implements
         });
     }
 
-    public HomerEurekaInstanceConfig(String namespace, String configFile, DataCenterInfo info) {
+    public HomerEurekaInstanceConfig(String namespace, DynamicProperty dynamicProperty) {
+        this(namespace, dynamicProperty, new DataCenterInfo() {
+            @Override
+            public Name getName() {
+                return Name.MyOwn;
+            }
+        });
+    }
+
+    public HomerEurekaInstanceConfig(String namespace, DynamicProperty dynamicProperty, DataCenterInfo info) {
         super(info);
         this.namespace = namespace.endsWith(".") ? namespace : namespace + ".";
-        this.dynamicProperty = new PropertiesFileDynamicProperty(configFile);
+        this.dynamicProperty = dynamicProperty;
     }
 
     @Override

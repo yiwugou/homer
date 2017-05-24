@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
-import com.yiwugou.homer.core.Server;
+import com.yiwugou.homer.core.server.Server;
 
 public class RandomLoadBalance implements LoadBalance {
     private final Random random = new Random();

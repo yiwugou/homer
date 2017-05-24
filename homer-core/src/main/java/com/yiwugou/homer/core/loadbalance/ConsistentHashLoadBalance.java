@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import com.yiwugou.homer.core.Server;
+import com.yiwugou.homer.core.server.Server;
 
 public class ConsistentHashLoadBalance implements LoadBalance {
 

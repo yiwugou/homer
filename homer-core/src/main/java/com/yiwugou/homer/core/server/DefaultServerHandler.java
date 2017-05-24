@@ -3,7 +3,6 @@ package com.yiwugou.homer.core.server;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.constant.Constants;

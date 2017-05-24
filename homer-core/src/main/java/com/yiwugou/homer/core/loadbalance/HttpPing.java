@@ -2,10 +2,10 @@ package com.yiwugou.homer.core.loadbalance;
 
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.enums.MethodEnum;
+import com.yiwugou.homer.core.server.Server;
 
 public class HttpPing implements Ping {
     private Client client;

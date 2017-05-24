@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.yiwugou.homer.core.Request;
-import com.yiwugou.homer.core.Server;
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.ServerException;
+import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class RequestFactory {
