@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.netflix.appinfo.ApplicationInfoManager;
@@ -14,22 +15,37 @@ import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.EurekaClientConfig;
 import com.yiwugou.homer.core.Homer;
-import com.yiwugou.homer.eureka.EurekaConstants;
+import com.yiwugou.homer.core.config.PropertiesConfigLoader;
+import com.yiwugou.homer.core.util.CommonUtils;
 import com.yiwugou.homer.eureka.DynamicProperty;
+import com.yiwugou.homer.eureka.EurekaConstants;
 import com.yiwugou.homer.eureka.EurekaInstanceCreater;
 import com.yiwugou.homer.eureka.HomerEurekaClientConfig;
 import com.yiwugou.homer.eureka.HomerEurekaInstanceConfig;
 import com.yiwugou.homer.eureka.PropertiesFileDynamicProperty;
 
 public class HomerEurekaTest {
-    private FooService fooService = Homer.builder().instanceCreater(new EurekaInstanceCreater())
-            .proxy(FooService.class);
+    private FooService fooService;
+    private BarService barService;
+
+    @Before
+    public void before() throws Exception {
+        this.fooService = Homer.builder().instanceCreater(new EurekaInstanceCreater()).proxy(FooService.class);
+
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("homer-eureka.properties");
+        Properties properties = new Properties();
+        properties.load(in);
+        CommonUtils.close(in);
+        this.barService = Homer.builder().instanceCreater(new EurekaInstanceCreater(properties))
+                .configLoader(new PropertiesConfigLoader(properties)).proxy(BarService.class);
+    }
 
     public static void main(String[] args) throws Exception {
         HomerEurekaTest test = new HomerEurekaTest();
+        test.before();
         int index = 10000000;
         while (index-- > 0) {
-            test.test2();
+            test.test4();
             System.err.println("-----------------------------------------------------------------");
             try {
                 Thread.sleep(1000L);
@@ -37,6 +53,12 @@ public class HomerEurekaTest {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void test4() {
+        String back = this.barService.foo();
+        System.err.println(back);
     }
 
     @Test
