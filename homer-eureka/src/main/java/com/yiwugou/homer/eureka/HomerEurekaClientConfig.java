@@ -19,10 +19,6 @@ public class HomerEurekaClientConfig implements EurekaClientConfig {
     private final DynamicProperty dynamicProperty;
     private final EurekaTransportConfig transportConfig;
 
-    public HomerEurekaClientConfig(DynamicProperty dynamicProperty) {
-        this(EurekaConstants.DEFAULT_CONFIG_NAMESPACE, dynamicProperty);
-    }
-
     public HomerEurekaClientConfig(String namespace, DynamicProperty dynamicProperty) {
         this.namespace = namespace.endsWith(".") ? namespace : namespace + ".";
         this.dynamicProperty = dynamicProperty;

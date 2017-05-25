@@ -17,6 +17,7 @@ import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.server.ServerCheck;
 import com.yiwugou.homer.core.server.ServerHandler;
+import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.Getter;
 
@@ -32,10 +33,10 @@ public class EurekaServerHandler implements ServerHandler {
     @Getter
     private List<Server> downServers = new CopyOnWriteArrayList<>();
 
-    public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader,
+    public EurekaServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader, String namespace,
             Properties properties) {
         this.initServers(requestUrl, clazz, configLoader);
-        this.initEurekaClient(properties);
+        this.initEurekaClient(namespace, properties);
         this.serverCheck = new EurekaServerCheck(this);
     }
 
@@ -65,8 +66,10 @@ public class EurekaServerHandler implements ServerHandler {
         this.serviceId = configLoader.loader(clazz.getName() + ConfigLoader.EUREKA_SERVICE_ID, serviceIds[0]);
     }
 
-    private void initEurekaClient(Properties properties) {
+    private void initEurekaClient(String namespace, Properties properties) {
         DynamicProperty dynamicProperty = null;
+        namespace = CommonUtils.hasTest(namespace) ? namespace.trim() : EurekaConstants.DEFAULT_CONFIG_NAMESPACE;
+
         if (properties == null) {
             dynamicProperty = new PropertiesFileDynamicProperty(EurekaConstants.DEFAULT_CONFIG_FILE);
         } else {
@@ -74,9 +77,9 @@ public class EurekaServerHandler implements ServerHandler {
         }
 
         ApplicationInfoManager.OptionalArgs options = null;
-        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig(dynamicProperty);
+        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig(namespace, dynamicProperty);
         ApplicationInfoManager applicationInfoManager = new ApplicationInfoManager(instanceConfig, options);
-        EurekaClientConfig clientConfig = new HomerEurekaClientConfig(dynamicProperty);
+        EurekaClientConfig clientConfig = new HomerEurekaClientConfig(namespace, dynamicProperty);
         this.eurekaClient = new DiscoveryClient(applicationInfoManager, clientConfig);
     }
 

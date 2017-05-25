@@ -8,10 +8,11 @@ import com.yiwugou.homer.core.factory.InstanceCreater;
 import com.yiwugou.homer.core.server.ServerHandler;
 
 public class EurekaInstanceCreater implements InstanceCreater {
-
+    private String namespace;
     private Properties properties;
 
-    public EurekaInstanceCreater(Properties properties) {
+    public EurekaInstanceCreater(String namespace, Properties properties) {
+        this.namespace = namespace;
         this.properties = properties;
     }
 
@@ -21,7 +22,8 @@ public class EurekaInstanceCreater implements InstanceCreater {
 
     @Override
     public ServerHandler createServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
-        ServerHandler serverHandler = new EurekaServerHandler(requestUrl, clazz, configLoader, this.properties);
+        ServerHandler serverHandler = new EurekaServerHandler(requestUrl, clazz, configLoader, this.namespace,
+                this.properties);
         return serverHandler;
     }
 

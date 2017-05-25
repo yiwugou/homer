@@ -1,7 +1,9 @@
 
-# a rest client like [feign](https://github.com/OpenFeign/feign)
+# a rest client visit eureka
 
-default properties is eureka-client.properties
+## use default properties.
+
+eureka-client.properties
 
 ```properties
 
@@ -28,12 +30,13 @@ FooService fooService = Homer.builder().instanceCreater(new EurekaInstanceCreate
 
 
 
-## use properties file
+## use custom properties file
+
 homer-eureka.properties
 
 ```properties
 
-eureka.serviceUrl.default=http://127.0.0.1:8761/eureka
+xiaoyong.serviceUrl.default=http://127.0.0.1:8761/eureka
 
 com.yiwugou.homer.eureka.test.BarService.eurekaServiceId=ms-redis-service
 
@@ -47,12 +50,10 @@ public interface BarService {
     public String foo();
 }
 
+String namespace = "xiaoyong"; // you custom namespace
+Properties properties = loader_from_file("homer-eureka.properties");
 
-InputStream in = this.getClass().getClassLoader().getResourceAsStream("homer-eureka.properties");
-Properties properties = new Properties();
-properties.load(in);
-CommonUtils.close(in);
-this.barService = Homer.builder().instanceCreater(new EurekaInstanceCreater(properties))
+this.barService = Homer.builder().instanceCreater(new EurekaInstanceCreater(namespace, properties))
         .configLoader(new PropertiesConfigLoader(properties)).proxy(BarService.class);
 
 ```

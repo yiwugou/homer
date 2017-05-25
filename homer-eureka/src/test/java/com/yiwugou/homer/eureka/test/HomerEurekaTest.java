@@ -36,7 +36,7 @@ public class HomerEurekaTest {
         Properties properties = new Properties();
         properties.load(in);
         CommonUtils.close(in);
-        this.barService = Homer.builder().instanceCreater(new EurekaInstanceCreater(properties))
+        this.barService = Homer.builder().instanceCreater(new EurekaInstanceCreater("xiaoyong", properties))
                 .configLoader(new PropertiesConfigLoader(properties)).proxy(BarService.class);
     }
 
@@ -87,9 +87,9 @@ public class HomerEurekaTest {
         String vipAddress = "ms-redis-service";
         DynamicProperty dynamicProperty = new PropertiesFileDynamicProperty(EurekaConstants.DEFAULT_CONFIG_FILE);
         ApplicationInfoManager.OptionalArgs options = null;
-        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig(dynamicProperty);
+        EurekaInstanceConfig instanceConfig = new HomerEurekaInstanceConfig("xiaoyong", dynamicProperty);
         ApplicationInfoManager applicationInfoManager = new ApplicationInfoManager(instanceConfig, options);
-        EurekaClientConfig clientConfig = new HomerEurekaClientConfig(dynamicProperty);
+        EurekaClientConfig clientConfig = new HomerEurekaClientConfig("xiaoyong", dynamicProperty);
         EurekaClient client = new DiscoveryClient(applicationInfoManager, clientConfig);
         int index = 10000000;
         while (index-- > 0) {
