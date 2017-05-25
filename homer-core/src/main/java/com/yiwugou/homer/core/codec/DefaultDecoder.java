@@ -11,6 +11,9 @@ public class DefaultDecoder implements Decoder {
 
     @Override
     public Object decode(Response response, Type returnType) {
+        if (returnType.equals(void.class)) {
+            return null;
+        }
         byte[] body = response.getBody();
         if (body == null || body.length == 0) {
             return null;
