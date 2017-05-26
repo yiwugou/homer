@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.yiwugou.homer.core.Request;
+import com.yiwugou.homer.core.annotation.RequestBody;
 import com.yiwugou.homer.core.annotation.RequestHeader;
 import com.yiwugou.homer.core.annotation.RequestHeaders;
 import com.yiwugou.homer.core.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.server.Server;
+import com.yiwugou.homer.core.util.AssertUtils;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class RequestFactory {
@@ -24,6 +26,7 @@ public class RequestFactory {
     private Object[] args;
     private Server server;
 
+    private String bodyString;
     private Map<String, Object> formMap = new HashMap<>();
 
     public RequestFactory(Method method, MethodOptions methodOptions, Object[] args, Server server) {
@@ -38,7 +41,7 @@ public class RequestFactory {
         RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
         String path = this.processParameterAnnotations();
 
-        byte[] body = this.formMapToBytes();
+        byte[] body = this.body();
         Map<String, String> headers = this.processHeaders();
 
         if (!this.server.isAlive()) {
@@ -72,6 +75,13 @@ public class RequestFactory {
         }
     }
 
+    private byte[] body() {
+        if (CommonUtils.hasTest(this.bodyString)) {
+            return this.bodyString.getBytes(Constants.UTF_8);
+        }
+        return this.formMapToBytes();
+    }
+
     private byte[] formMapToBytes() {
         StringBuffer sb = new StringBuffer();
         for (Map.Entry<String, Object> entry : this.formMap.entrySet()) {
@@ -90,9 +100,15 @@ public class RequestFactory {
     private String processParameterAnnotations() {
         Class<?> clazz = this.method.getDeclaringClass();
         RequestUrl requestUrl = clazz.getAnnotation(RequestUrl.class);
-        RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
 
-        String value = requestMapping.value();
+        RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
+        AssertUtils.notNull(requestMapping, this.method + " requestMapping ");
+        String path = requestMapping.value();
+
+        RequestBody requestBody = this.method.getAnnotation(RequestBody.class);
+        if (requestBody != null) {
+            this.bodyString = requestBody.value();
+        }
 
         Class<?>[] paramTypes = this.method.getParameterTypes();
         Annotation[][] paramAnnotations = this.method.getParameterAnnotations();
@@ -106,35 +122,35 @@ public class RequestFactory {
                     if (Map.class.isAssignableFrom(paramType)) {
                         Map<?, ?> argMap = (Map<?, ?>) arg;
                         for (Map.Entry<?, ?> entry : argMap.entrySet()) {
-                            this.formMap.put(entry.getKey().toString(), entry.getValue());
+                            String name = entry.getKey().toString();
+                            String value = CommonUtils.nullToEmptyString(entry.getValue());
+                            this.formMap.put(name, entry.getValue());
+                            if (CommonUtils.hasTest(this.bodyString) && this.bodyString.contains("{" + name + "}")) {
+                                this.bodyString = this.bodyString.replaceAll("\\{" + name + "\\}", value);
+                            }
                         }
                     } else {
                         String name = RequestParam.class.cast(annotation).value();
                         if (CommonUtils.hasTest(name)) {
-                            if (value.contains("{" + name + "}")) {
-                                value = value.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(arg));
+                            String argValue = CommonUtils.nullToEmptyString(arg);
+                            if (CommonUtils.hasTest(this.bodyString) && this.bodyString.contains("{" + name + "}")) {
+                                this.bodyString = this.bodyString.replaceAll("\\{" + name + "\\}", argValue);
+                            }
+
+                            if (path.contains("{" + name + "}")) {
+                                path = path.replaceAll("\\{" + name + "\\}", argValue);
                             } else {
-                                this.formMap.put(name, arg);
+                                this.formMap.put(name, argValue);
                             }
                         }
                     }
                 }
             }
         }
-        if (value.startsWith("/")) {
-            value = value.substring(1);
+        if (path.startsWith("/")) {
+            path = path.substring(1);
         }
-        return value;
+        return path;
     }
 
-    private static String expand(String str, Map<String, Object> param) {
-        for (Map.Entry<String, Object> entry : param.entrySet()) {
-            String name = entry.getKey();
-            Object value = entry.getValue();
-            if (str.contains("{" + name + "}")) {
-                str = str.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(value));
-            }
-        }
-        return str;
-    }
 }

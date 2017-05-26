@@ -12,5 +12,5 @@ import com.yiwugou.homer.core.enums.MethodEnum;
 public @interface RequestMapping {
     MethodEnum method() default MethodEnum.GET;
 
-    String value() default "";
+    String value();
 }

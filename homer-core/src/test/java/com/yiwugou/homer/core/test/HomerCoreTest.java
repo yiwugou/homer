@@ -17,11 +17,11 @@ public class HomerCoreTest {
         // new Thread() {
         // @Override
         // public void run() {
-        test.loadBalanceTest();
+        test.test1();
         // }
         // }.start();
         // }
-        test.loadBalanceTest();
+        // test.loadBalanceTest();
         System.err.println("running time:" + (System.currentTimeMillis() - start));
     }
 

@@ -11,6 +11,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import com.yiwugou.homer.core.constant.Constants;
 
@@ -128,5 +129,19 @@ public class CommonUtils {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String expandMap(String str, Map<String, Object> param) {
+        for (Map.Entry<String, Object> entry : param.entrySet()) {
+            str = CommonUtils.expandOne(str, entry.getKey(), entry.getValue());
+        }
+        return str;
+    }
+
+    public static String expandOne(String str, String name, Object value) {
+        if (str.contains("{" + name + "}")) {
+            str = str.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(value));
+        }
+        return str;
     }
 }
