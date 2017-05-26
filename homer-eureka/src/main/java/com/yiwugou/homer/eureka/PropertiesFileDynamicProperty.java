@@ -7,14 +7,15 @@ import java.util.Properties;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class PropertiesFileDynamicProperty implements DynamicProperty {
-    private PropertiesDynamicProperty dynamicProperty;
+    private DynamicProperty dynamicProperty;
 
     public PropertiesFileDynamicProperty(String propertiesFile) {
         try {
             if (!propertiesFile.endsWith(".properties")) {
                 propertiesFile = propertiesFile + ".properties";
             }
-            InputStream input = this.getClass().getClassLoader().getResourceAsStream(propertiesFile);
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream input = loader.getResourceAsStream(propertiesFile);
             Properties properties = new Properties();
             properties.load(input);
             this.dynamicProperty = new PropertiesDynamicProperty(properties);

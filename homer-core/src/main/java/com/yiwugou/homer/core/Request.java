@@ -1,8 +1,5 @@
 package com.yiwugou.homer.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import com.yiwugou.homer.core.enums.MethodEnum;
@@ -31,20 +28,16 @@ public class Request {
     @Getter
     private final byte[] body;
     @Getter
-    private final Map<String, List<String>> headers;
+    private final Map<String, String> headers;
     @Getter
     private final int connectTimeout;
     @Getter
     private final int readTimeout;
 
-    public Request addHeaders(String name, String... values) {
-        AssertUtils.notNull(name, "header name");
-        if (values == null || values.length == 0) {
-            this.headers.remove(name);
-        } else {
-            List<String> list = new ArrayList<>(Arrays.asList(values));
-            this.headers.put(name, list);
-        }
+    public Request addHeaders(String name, String value) {
+        AssertUtils.hasTest(name, "header name");
+        AssertUtils.hasTest(value, "header value");
+        this.headers.put(name, value);
         return this;
     }
 

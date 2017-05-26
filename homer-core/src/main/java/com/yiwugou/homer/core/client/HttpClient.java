@@ -5,11 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
@@ -40,30 +37,17 @@ public class HttpClient implements Client {
 
         boolean hasAcceptHeader = false;
         Integer contentLength = null;
-        boolean gzipEncodedRequest = false;
-        boolean deflateEncodedRequest = false;
 
         if (request.getHeaders() != null) {
-            Collection<String> contentEncodingValues = request.getHeaders().get(Constants.CONTENT_ENCODING);
-            gzipEncodedRequest = contentEncodingValues != null
-                    && contentEncodingValues.contains(Constants.ENCODING_GZIP);
-            deflateEncodedRequest = contentEncodingValues != null
-                    && contentEncodingValues.contains(Constants.ENCODING_DEFLATE);
-
             for (String field : request.getHeaders().keySet()) {
                 if (field.equalsIgnoreCase(Constants.ACCEPT)) {
                     hasAcceptHeader = true;
                 }
-                for (String value : request.getHeaders().get(field)) {
-                    if (field.equals(Constants.CONTENT_LENGTH)) {
-                        if (!gzipEncodedRequest && !deflateEncodedRequest) {
-                            contentLength = Integer.valueOf(value);
-                            connection.addRequestProperty(field, value);
-                        }
-                    } else {
-                        connection.addRequestProperty(field, value);
-                    }
+                String value = request.getHeaders().get(field);
+                if (field.equals(Constants.CONTENT_LENGTH)) {
+                    contentLength = Integer.valueOf(value);
                 }
+                connection.addRequestProperty(field, value);
             }
         }
 
@@ -80,11 +64,6 @@ public class HttpClient implements Client {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             OutputStream out = connection.getOutputStream();
-            if (gzipEncodedRequest) {
-                out = new GZIPOutputStream(out);
-            } else if (deflateEncodedRequest) {
-                out = new DeflaterOutputStream(out);
-            }
             try {
                 out.write(request.getBody());
             } finally {

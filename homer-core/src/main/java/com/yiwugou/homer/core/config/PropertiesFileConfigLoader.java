@@ -6,14 +6,15 @@ import java.util.Properties;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class PropertiesFileConfigLoader implements ConfigLoader {
-    private PropertiesConfigLoader configLoader;
+    private ConfigLoader configLoader;
 
     public PropertiesFileConfigLoader(String propertiesFile) {
         try {
             if (!propertiesFile.endsWith(".properties")) {
                 propertiesFile += ".properties";
             }
-            InputStream input = this.getClass().getClassLoader().getResourceAsStream(propertiesFile);
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream input = loader.getResourceAsStream(propertiesFile);
             Properties properties = new Properties();
             properties.load(input);
             this.configLoader = new PropertiesConfigLoader(properties);

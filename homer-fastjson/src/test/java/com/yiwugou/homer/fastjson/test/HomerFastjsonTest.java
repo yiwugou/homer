@@ -41,6 +41,7 @@ public class HomerFastjsonTest {
         System.err.println(foo4);
 
         this.fooService.foo5();
+        System.err.println();
 
         Map<String, List<Foo>> foo6 = this.fooService.foo6();
         System.err.println(foo6);

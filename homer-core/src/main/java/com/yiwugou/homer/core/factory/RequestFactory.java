@@ -3,10 +3,11 @@ package com.yiwugou.homer.core.factory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.yiwugou.homer.core.Request;
+import com.yiwugou.homer.core.annotation.RequestHeader;
+import com.yiwugou.homer.core.annotation.RequestHeaders;
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
 import com.yiwugou.homer.core.annotation.RequestUrl;
@@ -17,26 +18,28 @@ import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.util.CommonUtils;
 
 public class RequestFactory {
+    private Class<?> clazz;
     private Method method;
     private MethodOptions methodOptions;
     private Object[] args;
     private Server server;
+
+    private Map<String, Object> formMap = new HashMap<>();
 
     public RequestFactory(Method method, MethodOptions methodOptions, Object[] args, Server server) {
         this.method = method;
         this.methodOptions = methodOptions;
         this.args = args;
         this.server = server;
+        this.clazz = method.getDeclaringClass();
     }
-
-    private Map<String, Object> formMap = new HashMap<>();
 
     public Request create() {
         RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
         String path = this.processParameterAnnotations();
 
         byte[] body = this.formMapToBytes();
-        Map<String, List<String>> headers = this.processHeaders();
+        Map<String, String> headers = this.processHeaders();
 
         if (!this.server.isAlive()) {
             throw new ServerException(this.server + " is not available ");
@@ -49,8 +52,24 @@ public class RequestFactory {
 
     }
 
-    private Map<String, List<String>> processHeaders() {
-        return new HashMap<>();
+    private Map<String, String> processHeaders() {
+        RequestHeaders clazzHeader = this.clazz.getAnnotation(RequestHeaders.class);
+        RequestHeaders methodHeader = this.method.getAnnotation(RequestHeaders.class);
+        Map<String, String> headerMap = new HashMap<>();
+        this.processHeaderMap(clazzHeader, headerMap);
+        this.processHeaderMap(methodHeader, headerMap);
+        return headerMap;
+    }
+
+    private void processHeaderMap(RequestHeaders requestHeader, Map<String, String> headerMap) {
+        if (requestHeader != null && !CommonUtils.isEmpty(requestHeader.value())) {
+            RequestHeader[] headers = requestHeader.value();
+            for (RequestHeader header : headers) {
+                if (CommonUtils.hasTest(header.name()) && CommonUtils.hasTest(header.value())) {
+                    headerMap.put(header.name(), header.value());
+                }
+            }
+        }
     }
 
     private byte[] formMapToBytes() {
@@ -80,16 +99,24 @@ public class RequestFactory {
         for (int i = 0, len = paramAnnotations.length; i < len; ++i) {
             Class<?> paramType = paramTypes[i];
             Annotation[] annotations = paramAnnotations[i];
-
             for (Annotation annotation : annotations) {
                 Class<? extends Annotation> annotationType = annotation.annotationType();
                 Object arg = this.args[i];
                 if (annotationType.equals(RequestParam.class)) {
-                    String name = RequestParam.class.cast(annotation).value();
-                    if (value.contains("{" + name + "}")) {
-                        value = value.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(arg));
+                    if (Map.class.isAssignableFrom(paramType)) {
+                        Map<?, ?> argMap = (Map<?, ?>) arg;
+                        for (Map.Entry<?, ?> entry : argMap.entrySet()) {
+                            this.formMap.put(entry.getKey().toString(), entry.getValue());
+                        }
                     } else {
-                        this.formMap.put(name, arg);
+                        String name = RequestParam.class.cast(annotation).value();
+                        if (CommonUtils.hasTest(name)) {
+                            if (value.contains("{" + name + "}")) {
+                                value = value.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(arg));
+                            } else {
+                                this.formMap.put(name, arg);
+                            }
+                        }
                     }
                 }
             }
@@ -98,5 +125,16 @@ public class RequestFactory {
             value = value.substring(1);
         }
         return value;
+    }
+
+    private static String expand(String str, Map<String, Object> param) {
+        for (Map.Entry<String, Object> entry : param.entrySet()) {
+            String name = entry.getKey();
+            Object value = entry.getValue();
+            if (str.contains("{" + name + "}")) {
+                str = str.replaceAll("\\{" + name + "\\}", CommonUtils.nullToEmptyString(value));
+            }
+        }
+        return str;
     }
 }

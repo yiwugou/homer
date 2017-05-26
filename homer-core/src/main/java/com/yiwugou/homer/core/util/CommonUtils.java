@@ -5,9 +5,12 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import com.yiwugou.homer.core.constant.Constants;
 
@@ -111,4 +114,19 @@ public class CommonUtils {
         return obj == null ? "" : obj.toString();
     }
 
+    public static String urlDecode(String arg) {
+        try {
+            return URLDecoder.decode(arg, Constants.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String urlEncode(Object arg) {
+        try {
+            return URLEncoder.encode(String.valueOf(arg), Constants.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
