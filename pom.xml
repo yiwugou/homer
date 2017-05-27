@@ -10,6 +10,7 @@
         <module>homer-spring</module>
         <module>homer-fastjson</module>
         <module>homer-eureka</module>
+        <module>homer-eureka-spring</module>
     </modules>
 
     <properties>

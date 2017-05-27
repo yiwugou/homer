@@ -11,7 +11,6 @@ import com.yiwugou.homer.core.annotation.RequestHeader;
 import com.yiwugou.homer.core.annotation.RequestHeaders;
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
-import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.ServerException;
@@ -35,21 +34,19 @@ public class RequestFactory {
         this.args = args;
         this.server = server;
         this.clazz = method.getDeclaringClass();
+        this.initBodyString();
     }
 
     public Request create() {
         RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
-        String path = this.processParameterAnnotations();
-
-        byte[] body = this.body();
-        Map<String, String> headers = this.processHeaders();
+        String path = this.processParamAnnotationsReturnPath();
 
         if (!this.server.isAlive()) {
             throw new ServerException(this.server + " is not available ");
         }
 
         Request request = Request.builder().method(requestMapping.method()).url(this.server.getHostPort() + "/" + path)
-                .body(body).headers(headers).connectTimeout(this.methodOptions.getConnectTimeout())
+                .body(this.body()).headers(this.processHeaders()).connectTimeout(this.methodOptions.getConnectTimeout())
                 .readTimeout(this.methodOptions.getReadTimeout()).build();
         return request;
 
@@ -97,18 +94,17 @@ public class RequestFactory {
         return sb.toString().getBytes(Constants.UTF_8);
     }
 
-    private String processParameterAnnotations() {
-        Class<?> clazz = this.method.getDeclaringClass();
-        RequestUrl requestUrl = clazz.getAnnotation(RequestUrl.class);
-
-        RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
-        AssertUtils.notNull(requestMapping, this.method + " requestMapping ");
-        String path = requestMapping.value();
-
+    private void initBodyString() {
         RequestBody requestBody = this.method.getAnnotation(RequestBody.class);
         if (requestBody != null) {
             this.bodyString = requestBody.value();
         }
+    }
+
+    private String processParamAnnotationsReturnPath() {
+        RequestMapping requestMapping = this.method.getAnnotation(RequestMapping.class);
+        AssertUtils.notNull(requestMapping, this.method + " requestMapping ");
+        String path = requestMapping.value();
 
         Class<?>[] paramTypes = this.method.getParameterTypes();
         Annotation[][] paramAnnotations = this.method.getParameterAnnotations();

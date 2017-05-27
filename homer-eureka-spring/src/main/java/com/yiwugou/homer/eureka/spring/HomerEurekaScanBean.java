@@ -1,4 +1,4 @@
-package com.yiwugou.homer.spring;
+package com.yiwugou.homer.eureka.spring;
 
 import java.lang.reflect.Method;
 import java.util.Properties;
@@ -18,19 +18,25 @@ import org.springframework.util.StringUtils;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.util.AssertUtils;
+import com.yiwugou.homer.eureka.EurekaConstants;
 
 /**
  *
- * HomerScanBean
+ * HomerEurekaScanBean
  *
- * @author zhanxiaoyong
+ * @author zhanxiaoyong@yiwugou.com
  *
- * @since 2017年5月24日 上午10:29:30
+ * @since 2017年5月27日 上午10:04:36
  */
-public class HomerScanBean implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
+public class HomerEurekaScanBean implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
+    private ApplicationContext applicationContext;
     private Properties properties;
     private String[] packages;
-    private ApplicationContext applicationContext;
+    private String namespace = EurekaConstants.DEFAULT_CONFIG_NAMESPACE;
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 
     public void setPropertiesLoaderSupport(PropertiesLoaderSupport propertiesLoaderSupport) {
         Method method = ReflectionUtils.findMethod(PropertyPlaceholderConfigurer.class, "mergeProperties");
@@ -50,10 +56,13 @@ public class HomerScanBean implements ApplicationContextAware, BeanDefinitionReg
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        AssertUtils.notEmpty(this.packages, "homer spring package");
-        HomerBeanScanner scanner = new HomerBeanScanner(registry);
+        AssertUtils.notNull(this.properties, "homer eureka spring properties");
+        AssertUtils.notEmpty(this.packages, "homer eureka spring package");
+        AssertUtils.hasTest(this.namespace, "homer eureka spring namespace");
+        HomerEurekaBeanScanner scanner = new HomerEurekaBeanScanner(registry);
         scanner.setResourceLoader(this.applicationContext);
         scanner.setProperties(this.properties);
+        scanner.setNamespace(this.namespace);
         scanner.addIncludeFilter(new AnnotationTypeFilter(RequestUrl.class));
         scanner.scan(this.packages);
 

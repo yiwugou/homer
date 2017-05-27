@@ -5,5 +5,5 @@ import java.lang.reflect.Type;
 import com.yiwugou.homer.core.Response;
 
 public interface Decoder {
-    Object decode(Response response, Type returnType);
+    Object decode(final Response response, final Type returnType);
 }
