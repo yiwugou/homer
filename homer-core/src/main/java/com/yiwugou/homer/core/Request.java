@@ -34,7 +34,7 @@ public class Request {
     @Getter
     private final int readTimeout;
 
-    public Request addHeaders(String name, String value) {
+    public Request addHeader(String name, String value) {
         AssertUtils.hasTest(name, "header name");
         AssertUtils.hasTest(value, "header value");
         this.headers.put(name, value);

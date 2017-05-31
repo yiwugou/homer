@@ -18,6 +18,6 @@ public class BasicAuthRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(Request request) {
-        request.addHeaders("Authorization", this.headerValue);
+        request.addHeader("Authorization", this.headerValue);
     }
 }
