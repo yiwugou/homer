@@ -20,7 +20,6 @@ import com.yiwugou.homer.core.filter.ExecuteFilter;
 import com.yiwugou.homer.core.filter.Filter;
 import com.yiwugou.homer.core.filter.MockFilter;
 import com.yiwugou.homer.core.filter.cache.FilterCache;
-import com.yiwugou.homer.core.filter.cache.JvmFilterCache;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
 import lombok.Getter;
@@ -76,7 +75,7 @@ public final class Homer {
 
         private ConfigLoader configLoader = new NoneConfigLoader();
 
-        private FilterCache filterCache = new JvmFilterCache();
+        private FilterCache filterCache = null;
 
         private Decoder decoder = new DefaultDecoder();
 
@@ -127,8 +126,10 @@ public final class Homer {
         }
 
         private void addDefaultFilters() {
-            this.addFilter(0, new ExecuteFilter()).addFilter(0, new ActiveFilter())
-                    .addFilter(0, new CacheFilter(this.filterCache)).addFilter(0, new MockFilter());
+            this.addFilter(0, new ExecuteFilter()).addFilter(0, new ActiveFilter()).addFilter(0, new MockFilter());
+            if (this.filterCache != null) {
+                this.addFilter(1, new CacheFilter(this.filterCache));
+            }
         }
 
         public <T> T proxy(Class<T> clazz) {

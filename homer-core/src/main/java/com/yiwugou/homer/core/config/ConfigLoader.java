@@ -15,5 +15,7 @@ public interface ConfigLoader {
     static final String MOCK = ".mock";
     static final String ACTIVE = ".active";
     static final String CACHE = ".cache";
+    static final String CONNECT_TIMEOUT = ".connectTimeout";
+    static final String READ_TIMEOUT = ".readTimeout";
     static final String LOAD_BALANCE = ".loadbalance";
 }

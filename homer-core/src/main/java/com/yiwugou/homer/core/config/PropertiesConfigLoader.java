@@ -16,8 +16,8 @@ public class PropertiesConfigLoader implements ConfigLoader {
         if (key.startsWith("${") && key.endsWith("}")) {
             key = key.substring(2, key.length() - 1);
         }
-        String value = this.properties.getProperty(key, defaultValue == null ? "" : defaultValue.toString());
-        return (T) CommonUtils.stringToBasic(value, defaultValue.getClass());
+        String value = this.properties.getProperty(key, defaultValue == null ? null : defaultValue.toString());
+        return value == null ? null : (T) CommonUtils.stringToBasic(value, defaultValue.getClass());
     }
 
 }

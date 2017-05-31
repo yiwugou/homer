@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.enums.LoadBalanceEnum;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
@@ -16,31 +15,40 @@ public @interface RequestConfig {
     /**
      * 重试次数
      */
-    int retry() default RequestDefault.RETRY;
+    int retry() default -1;
 
     /**
      * 单秒中 单方法最大请求数
      */
-    int execute() default RequestDefault.EXECUTE;
+    int execute() default -1;
 
     /**
      * 单方法并发数
      */
-    int active() default RequestDefault.ACTIVE;
+    int active() default -1;
 
     /**
      * 缓存时间 毫秒
      */
-    long cache() default RequestDefault.CACHE;
+    long cache() default -1;
 
     /**
-     * 降级
+     * <pre>
+     * 降级 默认  true  代表失败返回 null
+     * 如果不忽略异常 设置为 false
+     * </pre>
      */
-    boolean mock() default RequestDefault.MOCK;
+    boolean mock() default true;
 
-    int connectTimeout() default RequestDefault.CONNECT_TIMEOUT;
+    /**
+     * 连接时间 毫秒
+     */
+    int connectTimeout() default -1;
 
-    int readTimeout() default RequestDefault.READ_TIMEOUT;
+    /**
+     * 读取时间 毫秒
+     */
+    int readTimeout() default -1;
 
     /**
      * 负载均衡
