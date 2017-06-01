@@ -4,14 +4,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
-public class EqualsMethodHandler implements MethodHandler {
+public class EqualsMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
 
     private Method[] methods;
 
-    public EqualsMethodHandler(Method method) {
-        this.clazz = method.getDeclaringClass();
-        this.methods = this.clazz.getMethods();
+    public EqualsMethodHandler(Class<?> clazz) {
+        this.clazz = clazz;
+        this.methods = clazz.getMethods();
     }
 
     @Override

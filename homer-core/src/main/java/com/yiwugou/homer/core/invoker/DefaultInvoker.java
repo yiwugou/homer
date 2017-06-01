@@ -10,19 +10,16 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public class DefaultInvoker implements Invoker {
-
-    @Getter
-    private MethodHandler methodHandler;
     @Getter
     private MethodOptions methodOptions;
     @Getter
     private Method method;
-    @Getter
-    private Object[] args;
+
+    private MethodHandler methodHandler;
 
     @Override
-    public Object invoke() throws Throwable {
-        return this.methodHandler.invoke(this.args);
+    public Object invoke(Object[] args) throws Throwable {
+        return this.methodHandler.invoke(args);
     }
 
 }

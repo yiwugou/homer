@@ -48,7 +48,7 @@ public class HomerEurekaTest {
             test.test4();
             System.err.println("-----------------------------------------------------------------");
             try {
-                Thread.sleep(1000L);
+                Thread.sleep(100L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -72,7 +72,7 @@ public class HomerEurekaTest {
         while (true) {
             String value = prop.getProperty("eureka.serviceUrl.default");
             System.err.println(value);
-            Thread.sleep(1000L);
+            Thread.sleep(500L);
         }
     }
 

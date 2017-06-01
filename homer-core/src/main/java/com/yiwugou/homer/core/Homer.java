@@ -14,11 +14,7 @@ import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.NoneConfigLoader;
 import com.yiwugou.homer.core.factory.DefaultInstanceCreater;
 import com.yiwugou.homer.core.factory.InstanceCreater;
-import com.yiwugou.homer.core.filter.ActiveFilter;
-import com.yiwugou.homer.core.filter.CacheFilter;
-import com.yiwugou.homer.core.filter.ExecuteFilter;
 import com.yiwugou.homer.core.filter.Filter;
-import com.yiwugou.homer.core.filter.MockFilter;
 import com.yiwugou.homer.core.filter.cache.FilterCache;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
@@ -125,11 +121,9 @@ public final class Homer {
             return this;
         }
 
-        private void addDefaultFilters() {
-            this.addFilter(0, new ExecuteFilter()).addFilter(0, new ActiveFilter()).addFilter(0, new MockFilter());
-            if (this.filterCache != null) {
-                this.addFilter(1, new CacheFilter(this.filterCache));
-            }
+        public Builder addRequestInterceptor(int index, RequestInterceptor requestInterceptor) {
+            this.requestInterceptors.add(index, requestInterceptor);
+            return this;
         }
 
         public <T> T proxy(Class<T> clazz) {
@@ -137,7 +131,6 @@ public final class Homer {
         }
 
         public Homer build() {
-            this.addDefaultFilters();
             return new Homer(this.client, this.configLoader, this.filterCache, this.decoder, this.instanceCreater,
                     this.filters, this.requestInterceptors);
         }

@@ -28,12 +28,12 @@ public class ExecuteFilter implements Filter {
             });
 
     @Override
-    public Object invoke(Invoker invoker) throws Throwable {
+    public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         String methodName = invoker.getMethod().getName();
         if (this.counter.get(methodName).incrementAndGet() > invoker.getMethodOptions().getExecute()) {
             throw new ExecuteException("execute is " + invoker.getMethodOptions().getExecute());
         }
-        return invoker.invoke();
+        return invoker.invoke(args);
     }
 
 }

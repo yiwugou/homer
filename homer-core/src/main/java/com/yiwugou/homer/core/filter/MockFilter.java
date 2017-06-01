@@ -12,10 +12,10 @@ import com.yiwugou.homer.core.invoker.Invoker;
  */
 public class MockFilter implements Filter {
     @Override
-    public Object invoke(Invoker invoker) throws Throwable {
+    public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         Object obj = null;
         try {
-            obj = invoker.invoke();
+            obj = invoker.invoke(args);
         } catch (Exception e) {
             if (invoker.getMethodOptions().getMock()) {
                 e.printStackTrace();

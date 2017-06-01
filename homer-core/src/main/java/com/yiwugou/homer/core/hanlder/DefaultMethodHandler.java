@@ -5,7 +5,7 @@ import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class DefaultMethodHandler implements MethodHandler {
+public class DefaultMethodHandler extends AbstractMethodHandler {
     // Uses Java 7 MethodHandle based reflection. As default methods will only
     // exist when
     // run on a Java 8 JVM this will not affect use on legacy JVMs.

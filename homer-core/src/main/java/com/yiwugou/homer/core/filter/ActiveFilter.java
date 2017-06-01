@@ -18,13 +18,13 @@ public class ActiveFilter implements Filter {
     private AtomicInteger data = new AtomicInteger(0);
 
     @Override
-    public Object invoke(Invoker invoker) throws Throwable {
+    public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         Object obj = null;
         try {
             if (this.data.incrementAndGet() > invoker.getMethodOptions().getActive()) {
                 throw new ActiveException("active is " + invoker.getMethodOptions().getActive());
             }
-            obj = invoker.invoke();
+            obj = invoker.invoke(args);
         } finally {
             this.data.decrementAndGet();
         }

@@ -11,7 +11,13 @@ public class HomerCoreTest {
 
     public static void main(String[] args) throws Exception {
         HomerCoreTest test = new HomerCoreTest();
-        test.init();
+        test.before();
+
+        String str = test.demoService.toString();
+        System.err.println(str);
+        int hashCode = test.demoService.hashCode();
+        System.err.println(hashCode);
+
         long start = System.currentTimeMillis();
         // for (int i = 1; i <= 100; i++) {
         // new Thread() {
@@ -26,7 +32,7 @@ public class HomerCoreTest {
     }
 
     @Before
-    public void init() {
+    public void before() {
         this.demoService = Homer.builder().build().proxy(DemoService.class);
     }
 

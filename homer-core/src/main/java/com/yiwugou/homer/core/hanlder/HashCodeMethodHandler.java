@@ -3,13 +3,13 @@ package com.yiwugou.homer.core.hanlder;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class HashCodeMethodHandler implements MethodHandler {
+public class HashCodeMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
     private Method[] methods;
 
-    public HashCodeMethodHandler(Method method) {
-        this.clazz = method.getDeclaringClass();
-        this.methods = this.clazz.getMethods();
+    public HashCodeMethodHandler(Class<?> clazz) {
+        this.clazz = clazz;
+        this.methods = clazz.getMethods();
     }
 
     @Override

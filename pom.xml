@@ -23,6 +23,7 @@
         <guava.version>19.0</guava.version>
         <spring.version>4.3.8.RELEASE</spring.version>
         <fastjson.version>1.2.32</fastjson.version>
+        <eureka.version>1.6.2</eureka.version>
         <junit.version>4.12</junit.version>
     </properties>
 
@@ -68,6 +69,11 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.netflix.eureka</groupId>
+                <artifactId>eureka-client</artifactId>
+                <version>${eureka.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

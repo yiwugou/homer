@@ -4,13 +4,13 @@ import java.lang.reflect.Method;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
-public class ToStringMethodHandler implements MethodHandler {
+public class ToStringMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
 
     private Method[] methods;
 
-    public ToStringMethodHandler(Method method) {
-        this.clazz = method.getDeclaringClass();
+    public ToStringMethodHandler(Class<?> clazz) {
+        this.clazz = clazz;
         this.methods = this.clazz.getMethods();
     }
 

@@ -5,11 +5,9 @@ import java.lang.reflect.Method;
 import com.yiwugou.homer.core.config.MethodOptions;
 
 public interface Invoker {
-    Object invoke() throws Throwable;
+    Object invoke(Object[] args) throws Throwable;
 
     Method getMethod();
-
-    Object[] getArgs();
 
     MethodOptions getMethodOptions();
 
