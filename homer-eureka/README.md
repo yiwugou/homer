@@ -18,7 +18,6 @@ eureka.serviceUrl.default=http://127.0.0.1:8761/eureka
 @RequestUrl("ms-redis-service")
 public interface FooService {
     @RequestMapping("foo")
-    @RequestConfig(loadBalance = LoadBalanceEnum.ROUND_ROBIN)
     public String foo();
 }
 

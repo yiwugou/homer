@@ -6,7 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.yiwugou.homer.core.enums.LoadBalanceEnum;
+import com.yiwugou.homer.core.loadbalance.LoadBalance;
+import com.yiwugou.homer.core.loadbalance.RandomLoadBalance;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -53,5 +54,5 @@ public @interface RequestConfig {
     /**
      * 负载均衡
      */
-    LoadBalanceEnum loadBalance() default LoadBalanceEnum.RANDOM;
+    Class<? extends LoadBalance> loadBalance() default RandomLoadBalance.class;
 }

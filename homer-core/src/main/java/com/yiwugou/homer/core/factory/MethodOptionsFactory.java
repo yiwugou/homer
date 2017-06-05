@@ -7,6 +7,7 @@ import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.MethodOptions;
 import com.yiwugou.homer.core.constant.RequestDefault;
+import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.server.ServerHandler;
 
 public class MethodOptionsFactory {
@@ -61,12 +62,13 @@ public class MethodOptionsFactory {
 
     private void initLoadBalance(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
-        String classLoadBalance = this.configLoader.loader(this.className + ConfigLoader.LOAD_BALANCE,
-                classRequestConfig == null ? RequestDefault.LOAD_BALANCE
-                        : classRequestConfig.loadBalance().toString().toLowerCase());
-        String methodLoadBalance = this.configLoader.loader(this.classMethodName + ConfigLoader.LOAD_BALANCE,
-                methodRequestConfig == null ? null : methodRequestConfig.loadBalance().toString().toLowerCase());
-        String loadBalance = notDef(classLoadBalance, null, methodLoadBalance);
+        Class<? extends LoadBalance> classLoadBalance = this.configLoader.loader(
+                this.className + ConfigLoader.LOAD_BALANCE,
+                classRequestConfig == null ? RequestDefault.LOAD_BALANCE : classRequestConfig.loadBalance());
+        Class<? extends LoadBalance> methodLoadBalance = this.configLoader.loader(
+                this.classMethodName + ConfigLoader.LOAD_BALANCE,
+                methodRequestConfig == null ? null : methodRequestConfig.loadBalance());
+        Class<? extends LoadBalance> loadBalance = notDef(methodLoadBalance, null, classLoadBalance);
         methodOptions.setLoadBalance(LoadBalanceFactory.createInstants(loadBalance));
     }
 
@@ -82,9 +84,9 @@ public class MethodOptionsFactory {
     private void initCache(RequestConfig classRequestConfig, MethodOptions methodOptions,
             RequestConfig methodRequestConfig) {
         Long classCache = this.configLoader.loader(this.className + ConfigLoader.CACHE,
-                classRequestConfig == null ? RequestDefault.CACHE : classRequestConfig.cache());
+                classRequestConfig == null ? -1L : classRequestConfig.cache());
         Long methodCache = this.configLoader.loader(this.classMethodName + ConfigLoader.CACHE,
-                methodRequestConfig == null ? RequestDefault.CACHE : methodRequestConfig.cache());
+                methodRequestConfig == null ? -1 : methodRequestConfig.cache());
         methodOptions.setCache(notDef(methodCache, -1L, classCache));
     }
 

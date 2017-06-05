@@ -71,10 +71,14 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     private void addDefaultFilters(Homer homer) {
         this.filters.add(0, new ExecuteFilter());
         this.filters.add(0, new ActiveFilter());
-        this.filters.add(0, new MockFilter());
-        if (homer.getFilterCache() != null) {
-            this.filters.add(1, new CacheFilter(homer.getFilterCache()));
+        if (homer.getFilterCache() != null && this.methodOptions.getCache() != null
+                && this.methodOptions.getCache() > 0) {
+            this.filters.add(0, new CacheFilter(homer.getFilterCache()));
         }
+        if (this.methodOptions.getMock()) {
+            this.filters.add(0, new MockFilter());
+        }
+
     }
 
     private void initInvoke() {

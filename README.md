@@ -8,7 +8,7 @@
 public interface DemoService {
 
     @RequestMapping("foo")
-    @RequestConfig(execute = 10000, active = 10000, loadBalance = LoadBalanceEnum.ROUND_ROBIN)
+    @RequestConfig(execute = 10000, active = 10000, loadBalance = RoundRobinLoadBalance.class)
     String foo();
 
     @RequestMapping(value = "foo1/{username}/{password}", method = MethodEnum.GET)
