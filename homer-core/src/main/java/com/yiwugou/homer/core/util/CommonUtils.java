@@ -14,6 +14,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import com.yiwugou.homer.core.constant.Constants;
+import com.yiwugou.homer.core.exception.HomerException;
 
 public class CommonUtils {
 
@@ -84,6 +85,15 @@ public class CommonUtils {
             return Short.parseShort(str);
         } else if (Boolean.class.equals(type)) {
             return Boolean.valueOf(str);
+        } else if (Class.class.equals(type)) {
+            try {
+                if (str.startsWith("class ")) {
+                    str = str.substring(6);
+                }
+                return Class.forName(str);
+            } catch (ClassNotFoundException e) {
+                throw new HomerException(e);
+            }
         }
         throw new IllegalArgumentException(
                 "type is " + type + ", can not cast to String, Long, Integer, Double, Float, Short, Boolean !");
