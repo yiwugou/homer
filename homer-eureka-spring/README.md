@@ -42,6 +42,17 @@ com.yiwugou.homer.eureka.spring.test.DemoService.foo.execute=10
 
 ```java
 
+    package com.yiwugou.homer.eureka.spring.test;
+
+    @RequestUrl("ms-redis-service")
+    public interface DemoService {
+        @RequestMapping("foo")
+        public String foo();
+    }
+
+
+
+
     @Resource
     private DemoService demoService;
 
