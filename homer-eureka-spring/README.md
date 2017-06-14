@@ -39,21 +39,22 @@ com.yiwugou.homer.eureka.spring.test.DemoService.foo.execute=10
 
 ```
 
+##java
 
 ```java
 
-    package com.yiwugou.homer.eureka.spring.test;
+package com.yiwugou.homer.eureka.spring.test;
 
-    @RequestUrl("ms-redis-service")
-    public interface DemoService {
-        @RequestMapping("foo")
-        public String foo();
-    }
-
-
+@RequestUrl("ms-redis-service")
+public interface DemoService {
+    @RequestMapping("foo")
+    public String foo();
+}
 
 
-    @Resource
-    private DemoService demoService;
+
+
+@Resource
+private DemoService demoService;
 
 ```
