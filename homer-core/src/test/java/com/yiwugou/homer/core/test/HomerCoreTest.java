@@ -27,7 +27,9 @@ public class HomerCoreTest {
         // }
         // }.start();
         // }
-        test.loadBalanceTest();
+        String foo = test.demoService.foo();
+        System.err.println(foo);
+        // test.loadBalanceTest();
         System.err.println("running time:" + (System.currentTimeMillis() - start));
     }
 

@@ -18,6 +18,7 @@ import com.yiwugou.homer.core.factory.RequestFactory;
 import com.yiwugou.homer.core.filter.ActiveFilter;
 import com.yiwugou.homer.core.filter.CacheFilter;
 import com.yiwugou.homer.core.filter.ExecuteFilter;
+import com.yiwugou.homer.core.filter.FallbackFilter;
 import com.yiwugou.homer.core.filter.Filter;
 import com.yiwugou.homer.core.filter.MockFilter;
 import com.yiwugou.homer.core.interceptor.BasicAuthRequestInterceptor;
@@ -71,6 +72,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     private void addDefaultFilters(Homer homer) {
         this.filters.add(0, new ExecuteFilter());
         this.filters.add(0, new ActiveFilter());
+        this.filters.add(0, new FallbackFilter());
         if (homer.getFilterCache() != null && this.methodOptions.getCache() != null
                 && this.methodOptions.getCache() > 0) {
             this.filters.add(0, new CacheFilter(homer.getFilterCache()));

@@ -9,7 +9,8 @@ import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.enums.MethodEnum;
 import com.yiwugou.homer.core.loadbalance.RoundRobinLoadBalance;
 
-@RequestUrl({ "http://127.0.0.1:8762", "http://127.0.0.1:8763", "http://127.0.0.1:8764" })
+@RequestUrl(value = { "http://127.0.0.1:8762", "http://127.0.0.1:8763",
+        "http://127.0.0.1:8764" }, fallback = DemoServiceFallback.class)
 @RequestHeaders({ @RequestHeader(name = "", value = ""), @RequestHeader(name = "", value = ""),
         @RequestHeader(name = "", value = "") })
 public interface DemoService {
