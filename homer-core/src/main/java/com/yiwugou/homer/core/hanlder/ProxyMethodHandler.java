@@ -21,6 +21,7 @@ import com.yiwugou.homer.core.filter.ExecuteFilter;
 import com.yiwugou.homer.core.filter.FallbackFilter;
 import com.yiwugou.homer.core.filter.Filter;
 import com.yiwugou.homer.core.filter.MockFilter;
+import com.yiwugou.homer.core.filter.RetryFilter;
 import com.yiwugou.homer.core.interceptor.BasicAuthRequestInterceptor;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 import com.yiwugou.homer.core.invoker.DefaultInvoker;
@@ -70,6 +71,9 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     }
 
     private void addDefaultFilters(Homer homer) {
+        if (this.methodOptions.getRetry() != null || this.methodOptions.getRetry() > 0) {
+            this.filters.add(new RetryFilter());
+        }
         this.filters.add(0, new ExecuteFilter());
         this.filters.add(0, new ActiveFilter());
         this.filters.add(0, new FallbackFilter());
@@ -142,20 +146,11 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     }
 
     private Object executeAndDecode(Request request) throws Exception {
-        int retry = this.methodOptions.getRetry();
-        while (true) {
-            try {
-                Response response = this.client.execute(request);
-                if (response.getCode() >= 400) {
-                    throw new ResponseException(response);
-                }
-                return this.decoder.decode(response, this.method.getGenericReturnType());
-            } catch (Exception e) {
-                if (--retry < 0) {
-                    throw e;
-                }
-            }
+        Response response = this.client.execute(request);
+        if (response.getCode() >= 400) {
+            throw new ResponseException(response);
         }
+        return this.decoder.decode(response, this.method.getGenericReturnType());
     }
 
 }

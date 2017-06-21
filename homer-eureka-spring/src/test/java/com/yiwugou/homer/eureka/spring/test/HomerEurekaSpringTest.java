@@ -15,10 +15,11 @@ public class HomerEurekaSpringTest {
     private DemoService demoService;
 
     @Test
-    public void test1() {
-        for (int i = 1; i <= 10000; i++) {
+    public void test1() throws Exception {
+        for (int i = 1; i <= 1000000; i++) {
             String after = this.demoService.foo();
             System.err.println(after);
+            Thread.sleep(200L);
         }
     }
 
