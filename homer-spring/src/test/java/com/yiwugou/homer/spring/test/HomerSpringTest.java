@@ -20,7 +20,7 @@ public class HomerSpringTest {
     @Resource
     private PropertyService propertyService;
 
-    // @Test
+    @Test
     public void test1() {
         for (int i = 1; i <= 10000; i++) {
             String after = this.demoService.foo();

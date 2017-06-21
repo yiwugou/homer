@@ -96,7 +96,11 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? RequestDefault.ACTIVE : classRequestConfig.active());
         Integer methodActive = this.configLoader.loader(this.classMethodName + ConfigLoader.ACTIVE,
                 methodRequestConfig == null ? RequestDefault.ACTIVE : methodRequestConfig.active());
-        methodOptions.setActive(notDef(methodActive, -1, classActive));
+        Integer active = notDef(methodActive, -1, classActive);
+        if (active == null || active < 0) {
+            active = RequestDefault.ACTIVE;
+        }
+        methodOptions.setActive(active);
     }
 
     private void initExecute(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -105,7 +109,11 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? RequestDefault.EXECUTE : classRequestConfig.execute());
         Integer methodExecute = this.configLoader.loader(this.classMethodName + ConfigLoader.EXECUTE,
                 methodRequestConfig == null ? RequestDefault.EXECUTE : methodRequestConfig.execute());
-        methodOptions.setExecute(notDef(methodExecute, -1, classExecute));
+        Integer execute = notDef(methodExecute, -1, classExecute);
+        if (execute == null || execute < 0) {
+            execute = RequestDefault.EXECUTE;
+        }
+        methodOptions.setExecute(execute);
     }
 
     private void initRetry(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -123,7 +131,11 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? RequestDefault.CONNECT_TIMEOUT : classRequestConfig.connectTimeout());
         Integer methodConnectTimeout = this.configLoader.loader(this.classMethodName + ConfigLoader.CONNECT_TIMEOUT,
                 methodRequestConfig == null ? RequestDefault.CONNECT_TIMEOUT : methodRequestConfig.connectTimeout());
-        methodOptions.setConnectTimeout(notDef(methodConnectTimeout, -1, classConnectTimeout));
+        Integer connectTimeout = notDef(methodConnectTimeout, -1, classConnectTimeout);
+        if (connectTimeout == null || connectTimeout < 0) {
+            connectTimeout = RequestDefault.CONNECT_TIMEOUT;
+        }
+        methodOptions.setConnectTimeout(connectTimeout);
     }
 
     private void initReadTimeout(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -132,7 +144,11 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? RequestDefault.READ_TIMEOUT : classRequestConfig.readTimeout());
         Integer methodReadTimeout = this.configLoader.loader(this.classMethodName + ConfigLoader.READ_TIMEOUT,
                 methodRequestConfig == null ? RequestDefault.READ_TIMEOUT : methodRequestConfig.readTimeout());
-        methodOptions.setConnectTimeout(notDef(methodReadTimeout, -1, classReadTimeout));
+        Integer readTimeout = notDef(methodReadTimeout, -1, classReadTimeout);
+        if (readTimeout == null || readTimeout < 0) {
+            readTimeout = RequestDefault.READ_TIMEOUT;
+        }
+        methodOptions.setConnectTimeout(readTimeout);
     }
 
     public static <T> T notDef(T obj, T def, T desc) {
