@@ -18,6 +18,9 @@ public class Server {
     @Getter
     private int retry = 0;
 
+    @Setter
+    private Exception exception;
+
     public void addRetry() {
         ++this.retry;
     }

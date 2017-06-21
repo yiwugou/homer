@@ -115,6 +115,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
                 this.methodOptions.getServerHandler().getServerCheck().serverUp(server);
                 return obj;
             } catch (IOException e) {
+                server.setException(e);
                 this.methodOptions.getServerHandler().getServerCheck().serverDown(server, e);
             }
         }

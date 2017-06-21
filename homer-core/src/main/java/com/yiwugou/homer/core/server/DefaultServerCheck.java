@@ -27,6 +27,7 @@ public class DefaultServerCheck extends AbstractServerCheck {
     @Override
     protected void up(Server server) {
         if (server != null) {
+            server.setException(null);
             server.setAlive(true);
             server.initRetry();
             this.serverHandler.getUpServers().add(server);
@@ -36,6 +37,5 @@ public class DefaultServerCheck extends AbstractServerCheck {
 
     @Override
     public void serverUp(Server upServer) {
-
     }
 }

@@ -134,7 +134,7 @@ public class RequestFactory {
                             }
 
                             if (path.contains("{" + name + "}")) {
-                                path = path.replaceAll("\\{" + name + "\\}", argValue);
+                                path = path.replaceAll("\\{" + name + "\\}", CommonUtils.urlEncode(argValue));
                             } else {
                                 this.formMap.put(name, argValue);
                             }

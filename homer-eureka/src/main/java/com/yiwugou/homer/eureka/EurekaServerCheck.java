@@ -25,7 +25,7 @@ public class EurekaServerCheck extends AbstractServerCheck {
         // Application application =
         // this.eurekaServerHandler.getEurekaClient().getApplication(in.getAppName());
         // application.addInstance(in);
-
+        server.setException(null);
         server.setAlive(true);
         server.initRetry();
         this.eurekaServerHandler.getDownServers().remove(server);

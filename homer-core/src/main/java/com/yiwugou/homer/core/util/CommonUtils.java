@@ -133,9 +133,9 @@ public class CommonUtils {
         }
     }
 
-    public static String urlEncode(Object arg) {
+    public static String urlEncode(String arg) {
         try {
-            return URLEncoder.encode(String.valueOf(arg), Constants.UTF_8.name());
+            return URLEncoder.encode(arg, Constants.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
