@@ -27,7 +27,7 @@ DemoService demoService = Homer.builder().proxy(DemoService.class);
 
 
 
-## use properties file
+## properties file
 homer.properties
 
 ```properties
@@ -43,3 +43,68 @@ com.yiwugou.homer.core.test.DemoService.foo.execute=10
 DemoService demoService = Homer.configLoader(new PropertiesFileConfigLoader("homer.properties")).builder().proxy(DemoService.class);
 
 ```
+
+
+## Future
+
+```java
+
+@RequestUrl({ "http://127.0.0.1:8762" })
+public interface DemoService {
+    @RequestMapping("foo")
+    Future<List<Foo>> foo();
+}
+
+Future<List<Foo>> future = demoService.foo();
+List<Foo> foos = future.get();
+
+```
+
+
+## Fallback
+
+```java
+
+@RequestUrl( value = { "http://127.0.0.1:8762" }, fallback = <? extends DemoService.class> )
+public interface DemoService {
+    @RequestMapping("foo")
+    String foo();
+}
+
+```
+
+## Header
+
+```java
+
+@RequestUrl( value = { "http://127.0.0.1:8762" } )
+@RequestHeaders({
+  @RequestHeader(name = "Accept", value = "application/json;charset=utf-8"),
+  @RequestHeader(name = "User-Agent", value = "Mozilla/5.0")
+})
+public interface DemoService {
+    @RequestMapping("foo")
+    String foo();
+}
+
+```
+
+## Body
+
+```java
+
+@RequestUrl( value = { "http://127.0.0.1:8762" } )
+@RequestBody("{username:{username}, password:{password}}")
+public interface DemoService {
+    @RequestMapping("foo")
+    String foo(@RequestParam("username") username, @RequestParam("password") password);
+}
+
+```
+
+
+
+
+
+
+
