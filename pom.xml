@@ -83,7 +83,7 @@
     <repositories>
         <repository>
             <id>local-public</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <url>http://10.6.104.232:8081/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>

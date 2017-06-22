@@ -14,10 +14,30 @@ public class RandomLoadBalance implements LoadBalance {
         if (servers == null || servers.size() == 0) {
             return null;
         }
+        int length = servers.size();
         if (servers.size() == 1) {
             return servers.get(0);
         }
-        int length = servers.size();
+
+        boolean sameWeight = true;
+        int totalWeight = 0;
+        for (int i = 0; i < length; i++) {
+            int weight = servers.get(i).getWeight();
+            totalWeight += weight;
+            if (sameWeight && i > 0 && weight != servers.get(i - 1).getWeight()) {
+                sameWeight = false;
+            }
+        }
+        if (totalWeight > 0 && !sameWeight) {
+            int offset = this.random.nextInt(totalWeight);
+            for (int i = 0; i < length; i++) {
+                offset -= servers.get(i).getWeight();
+                if (offset < 0) {
+                    return servers.get(i);
+                }
+            }
+        }
+
         return servers.get(this.random.nextInt(length));
     }
 

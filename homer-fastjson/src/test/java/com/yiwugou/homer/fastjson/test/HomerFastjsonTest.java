@@ -2,6 +2,7 @@ package com.yiwugou.homer.fastjson.test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +19,16 @@ public class HomerFastjsonTest {
     }
 
     @Test
-    public void test1() {
+    public void test1() throws Exception {
+        Future<?> foo1Future = this.fooService.foo1Future("futureUsername", "futurePassword");
+        System.err.println("foo1Future " + foo1Future.get());
+
+        Future<List<Foo>> foo2GetFuture = this.fooService.foo2GetFuture("futurefoo2Username", "futurefoo2Password");
+
         String fooString = this.fooService.fooString();
         System.err.println(fooString);
+
+        System.err.println("foo2GetFuture " + foo2GetFuture.get());
 
         Map<String, Object> fooMap = this.fooService.fooMap();
         System.err.println(fooMap);
@@ -45,6 +53,7 @@ public class HomerFastjsonTest {
 
         Map<String, List<Foo>> foo6 = this.fooService.foo6();
         System.err.println(foo6);
+
     }
 
 }

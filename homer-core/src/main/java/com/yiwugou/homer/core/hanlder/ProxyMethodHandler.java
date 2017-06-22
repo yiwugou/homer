@@ -2,7 +2,10 @@ package com.yiwugou.homer.core.hanlder;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import com.yiwugou.homer.core.Homer;
 import com.yiwugou.homer.core.Request;
@@ -11,6 +14,7 @@ import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.codec.Decoder;
 import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.enums.MethodModelEnum;
 import com.yiwugou.homer.core.exception.ResponseException;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.factory.MethodOptionsFactory;
@@ -25,6 +29,7 @@ import com.yiwugou.homer.core.filter.RetryFilter;
 import com.yiwugou.homer.core.interceptor.BasicAuthRequestInterceptor;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 import com.yiwugou.homer.core.invoker.DefaultInvoker;
+import com.yiwugou.homer.core.invoker.Function;
 import com.yiwugou.homer.core.invoker.Invoker;
 import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.util.CommonUtils;
@@ -37,8 +42,9 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     private Decoder decoder;
     private Class<?> clazz;
     private List<Filter> filters;
-
+    private Type actualReturnType;
     private Invoker invoker;
+    private MethodModelEnum methodModel = MethodModelEnum.NORMAL;
 
     public ProxyMethodHandler(Homer homer, Method method) {
         super();
@@ -50,9 +56,26 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         this.filters = homer.getFilters();
         this.methodOptions = new MethodOptionsFactory(method, homer.getConfigLoader(), homer.getInstanceCreater())
                 .create();
+        this.initMethodModel();
         this.addDefaultFilters(homer);
         this.initDefaultRequestInterceptors();
         this.initInvoke();
+    }
+
+    private void initMethodModel() {
+        this.actualReturnType = this.method.getGenericReturnType();
+        if (this.actualReturnType instanceof ParameterizedType) {
+            final ParameterizedType paramType = (ParameterizedType) this.actualReturnType;
+            if (paramType.getRawType().equals(Future.class)) {
+                this.actualReturnType = paramType.getActualTypeArguments()[0];
+                this.methodModel = MethodModelEnum.FUTURE;
+            }
+        }
+    }
+
+    @Override
+    public MethodModelEnum getMethodModel() {
+        return this.methodModel;
     }
 
     @Override
@@ -88,15 +111,16 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     }
 
     private void initInvoke() {
-        this.invoker = this.buildFilterChain(new DefaultInvoker(this.methodOptions, this.method, new MethodHandler() {
-            @Override
-            public Object invoke(Object[] args) throws Throwable {
-                return ProxyMethodHandler.this.invoker(args);
-            }
-        }));
+        this.invoker = this
+                .buildFilterChain(new DefaultInvoker(this.methodOptions, this.method, new Function<Object[], Object>() {
+                    @Override
+                    public Object apply(Object[] args) throws Exception {
+                        return ProxyMethodHandler.this.loadBalanceInvoker(args);
+                    }
+                }));
     }
 
-    private Object invoker(Object[] args) throws Exception {
+    private Object loadBalanceInvoker(Object[] args) throws Exception {
         while (true) {
             Server server = this.methodOptions.getLoadBalance()
                     .choose(this.methodOptions.getServerHandler().getUpServers(), this.method, args);
@@ -151,7 +175,8 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         if (response.getCode() >= 400) {
             throw new ResponseException(response);
         }
-        return this.decoder.decode(response, this.method.getGenericReturnType());
+        Object obj = this.decoder.decode(response, this.actualReturnType);
+        return obj;
     }
 
 }

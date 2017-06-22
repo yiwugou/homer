@@ -12,6 +12,7 @@ public class HomerCoreTest {
     public static void main(String[] args) throws Exception {
         HomerCoreTest test = new HomerCoreTest();
         test.before();
+        test.propertiesBefore();
 
         String str = test.demoService.toString();
         System.err.println(str);
@@ -27,9 +28,9 @@ public class HomerCoreTest {
         // }
         // }.start();
         // }
-        String foo = test.demoService.foo();
-        System.err.println(foo);
-        // test.loadBalanceTest();
+        // String foo = test.demoService.foo();
+        // System.err.println(foo);
+        test.randomloadBalanceTest();
         System.err.println("running time:" + (System.currentTimeMillis() - start));
     }
 
@@ -66,9 +67,35 @@ public class HomerCoreTest {
         }
     }
 
-    public void propertiesTest() {
-        DemoService demoService = Homer.builder().configLoader(new PropertiesFileConfigLoader("homer.properties"))
-                .build().proxy(DemoService.class);
+    // @Test
+    public void randomloadBalanceTest() {
+        int index = 100000000;
+        while (index-- > 0) {
+            String after = this.demoService.randomLoadBalance();
+            System.err.println(after);
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // @Before
+    public void propertiesBefore() {
+        PropertyDemoService propertyDemoService = Homer.builder()
+                .configLoader(new PropertiesFileConfigLoader("homer.properties")).build()
+                .proxy(PropertyDemoService.class);
+        int index = 100000000;
+        while (index-- > 0) {
+            String after = propertyDemoService.foo();
+            System.err.println(after);
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

@@ -20,18 +20,33 @@ public class DefaultServerHandler implements ServerHandler {
 
     public DefaultServerHandler(RequestUrl requestUrl, Class<?> clazz, ConfigLoader configLoader) {
         String[] requestUrls = requestUrl.value();
-        String url = configLoader.loader(clazz.getName() + ConfigLoader.URL,
+        String allUrl = configLoader.loader(clazz.getName() + ConfigLoader.URL,
                 CommonUtils.joinToString(Constants.URL_SEPARATOR, requestUrls));
 
-        String urls[] = url.split(Constants.URL_SEPARATOR);
+        String allUrls[] = allUrl.split(Constants.URL_SEPARATOR);
         Server server = null;
 
-        for (String u : urls) {
-            if (CommonUtils.hasTest(u)) {
-                if (u.endsWith("/")) {
-                    u = u.substring(0, u.length() - 1);
+        for (String oneAllUrl : allUrls) {
+            if (CommonUtils.hasTest(oneAllUrl)) {
+                String[] us = oneAllUrl.split(",");
+                String url = us[0].trim();
+                if (url.endsWith("/")) {
+                    url = url.substring(0, url.length() - 1);
                 }
-                server = new Server(u);
+
+                int weight = 1;
+                if (us.length > 1) {
+                    for (int i = 1; i < us.length; i++) {
+                        String[] keyValue = us[i].split("=");
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+                        if ("weight".equalsIgnoreCase(key)) {
+                            weight = Integer.parseInt(value);
+                        }
+                    }
+                }
+
+                server = new Server(url, weight);
                 this.upServers.add(server);
             }
         }

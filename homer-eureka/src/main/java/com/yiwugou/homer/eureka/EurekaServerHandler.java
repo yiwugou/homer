@@ -56,7 +56,8 @@ public class EurekaServerHandler implements ServerHandler {
 
     private Server instanceInfoToServer(InstanceInfo instanceInfo) {
         String hostPort = instanceInfo.getHostName() + ":" + instanceInfo.getPort();
-        Server server = new Server(hostPort);
+
+        Server server = new Server(hostPort, 1);
         server.setAlive(true);
         return server;
     }

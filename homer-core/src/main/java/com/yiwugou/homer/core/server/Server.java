@@ -21,6 +21,9 @@ public class Server {
     @Setter
     private Exception exception;
 
+    @Getter
+    private int weight = 1;
+
     public void addRetry() {
         ++this.retry;
     }
@@ -29,8 +32,9 @@ public class Server {
         this.retry = 0;
     }
 
-    public Server(String hostPort) {
+    public Server(String hostPort, int weight) {
         this.hostPort = hostPort;
+        this.weight = weight;
     }
 
     @Override

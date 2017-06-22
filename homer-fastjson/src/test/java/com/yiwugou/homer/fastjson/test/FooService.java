@@ -2,6 +2,7 @@ package com.yiwugou.homer.fastjson.test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
@@ -38,5 +39,12 @@ public interface FooService {
 
     @RequestMapping("foo6")
     Map<String, List<Foo>> foo6();
+
+    @RequestMapping("foo1/{username}/{password}")
+    Future<?> foo1Future(@RequestParam("username") String username, @RequestParam("password") String password);
+
+    @RequestMapping("foo2")
+    Future<List<Foo>> foo2GetFuture(@RequestParam("username") String username,
+            @RequestParam("password") String password);
 
 }

@@ -1,14 +1,17 @@
 package com.yiwugou.homer.core.codec;
 
 import java.lang.reflect.Type;
-import java.util.concurrent.Callable;
 
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.DecoderException;
 
 public abstract class AbstractDecoder implements Decoder {
-    public Object baseDecode(Response response, Type returnType, Callable<Object> callable) {
+
+    public abstract Object objectDecode(final Response response, final Type returnType);
+
+    @Override
+    public Object decode(Response response, Type returnType) {
         if (returnType.equals(void.class)) {
             return null;
         }
@@ -31,7 +34,7 @@ public abstract class AbstractDecoder implements Decoder {
             }
         }
         try {
-            return callable.call();
+            return this.objectDecode(response, returnType);
         } catch (Exception e) {
             throw new DecoderException("body is " + new String(body, Constants.UTF_8), e);
         }

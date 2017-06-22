@@ -41,17 +41,21 @@ public final class Homer {
     @Getter
     private final InstanceCreater instanceCreater;
     @Getter
+    private final int threadPoolSize;
+    @Getter
     private final List<Filter> filters;
     @Getter
     private final List<RequestInterceptor> requestInterceptors;
 
     private Homer(Client client, ConfigLoader configLoader, FilterCache filterCache, Decoder decoder,
-            InstanceCreater instanceCreater, List<Filter> filters, List<RequestInterceptor> requestInterceptors) {
+            InstanceCreater instanceCreater, int threadPoolSize, List<Filter> filters,
+            List<RequestInterceptor> requestInterceptors) {
         this.client = client;
         this.configLoader = configLoader;
         this.filterCache = filterCache;
         this.decoder = decoder;
         this.instanceCreater = instanceCreater;
+        this.threadPoolSize = threadPoolSize;
         this.filters = filters;
         this.requestInterceptors = requestInterceptors;
     }
@@ -76,6 +80,8 @@ public final class Homer {
         private Decoder decoder = new DefaultDecoder();
 
         private InstanceCreater instanceCreater = new DefaultInstanceCreater();
+
+        private int threadPoolSize = 10;
 
         private List<Filter> filters = new LinkedList<>();
 
@@ -106,6 +112,11 @@ public final class Homer {
             return this;
         }
 
+        public Builder threadPoolSize(int threadPoolSize) {
+            this.threadPoolSize = threadPoolSize;
+            return this;
+        }
+
         public Builder addFilter(int index, Filter filter) {
             this.filters.add(index, filter);
             return this;
@@ -132,7 +143,7 @@ public final class Homer {
 
         public Homer build() {
             return new Homer(this.client, this.configLoader, this.filterCache, this.decoder, this.instanceCreater,
-                    this.filters, this.requestInterceptors);
+                    this.threadPoolSize, this.filters, this.requestInterceptors);
         }
     }
 
