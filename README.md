@@ -81,8 +81,8 @@ public interface DemoService {
 public interface DemoService {
     @RequestMapping("foo")
     @RequestHeaders({
-	  @RequestHeader(name = "Accept", value = "application/json;charset=utf-8"),
-	  @RequestHeader(name = "User-Agent", value = "Mozilla/5.0")
+      @RequestHeader(name = "Accept", value = "application/json;charset=utf-8"),
+      @RequestHeader(name = "User-Agent", value = "Mozilla/5.0")
 	})
     String foo();
 }
