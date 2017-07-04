@@ -78,12 +78,12 @@ public interface DemoService {
 ```java
 
 @RequestUrl( value = { "http://127.0.0.1:8762" } )
-@RequestHeaders({
-  @RequestHeader(name = "Accept", value = "application/json;charset=utf-8"),
-  @RequestHeader(name = "User-Agent", value = "Mozilla/5.0")
-})
 public interface DemoService {
     @RequestMapping("foo")
+    @RequestHeaders({
+	  @RequestHeader(name = "Accept", value = "application/json;charset=utf-8"),
+	  @RequestHeader(name = "User-Agent", value = "Mozilla/5.0")
+	})
     String foo();
 }
 
@@ -94,9 +94,9 @@ public interface DemoService {
 ```java
 
 @RequestUrl( value = { "http://127.0.0.1:8762" } )
-@RequestBody("{username:{username}, password:{password}}")
 public interface DemoService {
     @RequestMapping("foo")
+    @RequestBody("{username:{username}, password:{password}}")
     String foo(@RequestParam("username") username, @RequestParam("password") password);
 }
 

@@ -11,7 +11,7 @@ import com.yiwugou.homer.core.loadbalance.RandomLoadBalance;
 import com.yiwugou.homer.core.loadbalance.RoundRobinLoadBalance;
 
 @RequestUrl(value = { "http://127.0.0.1:8762,weight=10", "http://127.0.0.1:8763,weight=2",
-        "http://127.0.0.1:8764,weight=5" }, fallback = DemoServiceFallback.class)
+        "http://127.0.0.1:8764,weight=5", "http://127.0.0.1:8765,weight=5" }, fallback = DemoServiceFallback.class)
 @RequestHeaders({ @RequestHeader(name = "", value = "") })
 public interface DemoService {
 

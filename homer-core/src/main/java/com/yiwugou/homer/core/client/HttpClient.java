@@ -83,15 +83,13 @@ public class HttpClient implements Client {
 
         Map<String, List<String>> headers = connection.getHeaderFields();
 
-        byte[] body = new byte[0];
-
         InputStream input = null;
         if (code >= 400) {
             input = connection.getErrorStream();
         } else {
             input = connection.getInputStream();
         }
-        body = CommonUtils.inputStreamToBytes(input);
+        byte[] body = CommonUtils.inputStreamToBytes(input);
         CommonUtils.close(input);
         Response response = Response.builder().code(code).message(message).headers(headers).body(body).request(request)
                 .build();
