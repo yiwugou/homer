@@ -7,6 +7,14 @@ import com.yiwugou.homer.core.config.MethodOptions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ *
+ * DefaultInvoker
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:14:02
+ */
 @AllArgsConstructor
 public class DefaultInvoker implements Invoker {
     @Getter

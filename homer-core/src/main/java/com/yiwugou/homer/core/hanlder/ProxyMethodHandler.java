@@ -7,7 +7,11 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yiwugou.homer.core.Homer;
+import com.yiwugou.homer.core.ProxyInvocationHandler;
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.annotation.RequestUrl;
@@ -34,7 +38,17 @@ import com.yiwugou.homer.core.invoker.Invoker;
 import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * ProxyMethodHandler
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:03:22
+ */
 public class ProxyMethodHandler extends AbstractMethodHandler {
+    private static final Logger log = LoggerFactory.getLogger(ProxyInvocationHandler.class);
+
     private Client client;
     private Method method;
     private MethodOptions methodOptions;
@@ -56,6 +70,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         this.filters = homer.getFilters();
         this.methodOptions = new MethodOptionsFactory(method, homer.getConfigLoader(), homer.getInstanceCreater())
                 .create();
+        log.debug("method options is {}", this.methodOptions);
         this.initMethodModel();
         this.addDefaultFilters(homer);
         this.initDefaultRequestInterceptors();
@@ -130,6 +145,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
             }
             try {
                 Request request = new RequestFactory(this.method, this.methodOptions, args, server).create();
+                log.debug("request is {}", request);
                 if (this.requestInterceptors != null) {
                     for (RequestInterceptor requestInterceptor : this.requestInterceptors) {
                         requestInterceptor.apply(request);
@@ -172,10 +188,12 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
 
     private Object executeAndDecode(Request request) throws Exception {
         Response response = this.client.execute(request);
+        log.debug("response is {}", response);
         if (response.getCode() >= 400) {
             throw new ResponseException(response);
         }
         Object obj = this.decoder.decode(response, this.actualReturnType);
+        log.debug("response object is {}", obj);
         return obj;
     }
 

@@ -3,6 +3,14 @@ package com.yiwugou.homer.core.constant;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.loadbalance.RandomLoadBalance;
 
+/**
+ *
+ * RequestDefault
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:10:48
+ */
 public class RequestDefault {
     public static final int RETRY = 0;
     public static final int EXECUTE = 1000;

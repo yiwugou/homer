@@ -4,6 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ *
+ * Server
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:17
+ */
 @ToString
 public class Server {
 

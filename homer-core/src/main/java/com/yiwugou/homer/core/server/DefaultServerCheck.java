@@ -2,6 +2,14 @@ package com.yiwugou.homer.core.server;
 
 import java.io.IOException;
 
+/**
+ *
+ * DefaultServerCheck
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:08
+ */
 public class DefaultServerCheck extends AbstractServerCheck {
 
     private ServerHandler serverHandler;

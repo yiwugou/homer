@@ -6,6 +6,14 @@ import java.util.List;
 
 import com.yiwugou.homer.core.server.Server;
 
+/**
+ *
+ * ConsistentHashLoadBalance
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:14:37
+ */
 public class ConsistentHashLoadBalance implements LoadBalance {
 
     public int hash(Method method, Object[] args) {

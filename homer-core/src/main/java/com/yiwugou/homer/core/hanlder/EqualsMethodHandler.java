@@ -4,6 +4,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
+/**
+ *
+ * EqualsMethodHandler
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:35
+ */
 public class EqualsMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
 

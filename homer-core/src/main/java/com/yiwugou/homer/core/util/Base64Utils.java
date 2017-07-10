@@ -2,6 +2,14 @@ package com.yiwugou.homer.core.util;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ *
+ * Base64Utils
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:38
+ */
 public class Base64Utils {
     public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
     private static final byte[] MAP = new byte[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',

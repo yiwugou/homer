@@ -10,6 +10,14 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * JvmFilterCache
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:24
+ */
 @Deprecated
 public class JvmFilterCache implements FilterCache {
 

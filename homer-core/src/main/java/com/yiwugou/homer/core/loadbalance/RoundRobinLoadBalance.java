@@ -7,6 +7,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.yiwugou.homer.core.server.Server;
 
+/**
+ *
+ * RoundRobinLoadBalance
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:14:58
+ */
 public class RoundRobinLoadBalance implements LoadBalance {
     private AtomicInteger CYCLIC = new AtomicInteger(0);
 

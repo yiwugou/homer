@@ -3,6 +3,14 @@ package com.yiwugou.homer.core.hanlder;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+/**
+ *
+ * HashCodeMethodHandler
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:40
+ */
 public class HashCodeMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
     private Method[] methods;

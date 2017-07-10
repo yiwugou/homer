@@ -7,6 +7,14 @@ import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.enums.MethodEnum;
 import com.yiwugou.homer.core.server.Server;
 
+/**
+ *
+ * HttpPing
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:14:43
+ */
 public class HttpPing implements Ping {
     private Client client;
 

@@ -13,6 +13,14 @@ import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * HttpClient
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:09:39
+ */
 public class HttpClient implements Client {
 
     @Override

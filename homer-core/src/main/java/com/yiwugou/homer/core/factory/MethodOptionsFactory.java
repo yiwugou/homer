@@ -2,6 +2,10 @@ package com.yiwugou.homer.core.factory;
 
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.yiwugou.homer.core.Homer;
 import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
@@ -10,7 +14,17 @@ import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.server.ServerHandler;
 
+/**
+ *
+ * MethodOptionsFactory
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:12:44
+ */
 public class MethodOptionsFactory {
+    private static final Logger log = LoggerFactory.getLogger(Homer.class);
+
     private Class<?> clazz;
     private Method method;
     private ConfigLoader configLoader;
@@ -68,8 +82,10 @@ public class MethodOptionsFactory {
         Class<? extends LoadBalance> methodLoadBalance = this.configLoader.loader(
                 this.classMethodName + ConfigLoader.LOAD_BALANCE,
                 methodRequestConfig == null ? null : methodRequestConfig.loadBalance());
-        Class<? extends LoadBalance> loadBalance = notDef(methodLoadBalance, null, classLoadBalance);
-        methodOptions.setLoadBalance(LoadBalanceFactory.createInstants(loadBalance));
+        Class<? extends LoadBalance> loadBalanceClass = notDef(methodLoadBalance, null, classLoadBalance);
+        LoadBalance loadBalance = LoadBalanceFactory.createInstants(loadBalanceClass);
+        log.debug("{} loadBalance is {}", this.method, loadBalance);
+        methodOptions.setLoadBalance(loadBalance);
     }
 
     private void initMock(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -78,7 +94,9 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? Boolean.TRUE : classRequestConfig.mock());
         Boolean methodMock = this.configLoader.loader(this.classMethodName + ConfigLoader.MOCK,
                 methodRequestConfig == null ? null : methodRequestConfig.mock());
-        methodOptions.setMock(notDef(methodMock, false, classMock));
+        Boolean mock = notDef(methodMock, false, classMock);
+        log.debug("{} mock is {}", this.method, mock);
+        methodOptions.setMock(mock);
     }
 
     private void initCache(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -87,7 +105,9 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? -1L : classRequestConfig.cache());
         Long methodCache = this.configLoader.loader(this.classMethodName + ConfigLoader.CACHE,
                 methodRequestConfig == null ? -1 : methodRequestConfig.cache());
-        methodOptions.setCache(notDef(methodCache, -1L, classCache));
+        Long cache = notDef(methodCache, -1L, classCache);
+        log.debug("{} cache is {}", this.method, cache);
+        methodOptions.setCache(cache);
     }
 
     private void initActive(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -100,6 +120,7 @@ public class MethodOptionsFactory {
         if (active == null || active < 0) {
             active = RequestDefault.ACTIVE;
         }
+        log.debug("{} active is {}", this.method, active);
         methodOptions.setActive(active);
     }
 
@@ -113,6 +134,7 @@ public class MethodOptionsFactory {
         if (execute == null || execute < 0) {
             execute = RequestDefault.EXECUTE;
         }
+        log.debug("{} execute is {}", this.method, execute);
         methodOptions.setExecute(execute);
     }
 
@@ -122,7 +144,9 @@ public class MethodOptionsFactory {
                 classRequestConfig == null ? RequestDefault.RETRY : classRequestConfig.retry());
         Integer methodRetry = this.configLoader.loader(this.classMethodName + ConfigLoader.RETRY,
                 methodRequestConfig == null ? RequestDefault.RETRY : methodRequestConfig.retry());
-        methodOptions.setRetry(notDef(methodRetry, -1, classRetry));
+        Integer retry = notDef(methodRetry, -1, classRetry);
+        log.debug("{} retry is {}", this.method, retry);
+        methodOptions.setRetry(retry);
     }
 
     private void initConnectTimeout(RequestConfig classRequestConfig, MethodOptions methodOptions,
@@ -135,6 +159,7 @@ public class MethodOptionsFactory {
         if (connectTimeout == null || connectTimeout < 0) {
             connectTimeout = RequestDefault.CONNECT_TIMEOUT;
         }
+        log.debug("{} connectTimeout is {}", this.method, connectTimeout);
         methodOptions.setConnectTimeout(connectTimeout);
     }
 
@@ -148,6 +173,7 @@ public class MethodOptionsFactory {
         if (readTimeout == null || readTimeout < 0) {
             readTimeout = RequestDefault.READ_TIMEOUT;
         }
+        log.debug("{} readTimeout is {}", this.method, readTimeout);
         methodOptions.setConnectTimeout(readTimeout);
     }
 

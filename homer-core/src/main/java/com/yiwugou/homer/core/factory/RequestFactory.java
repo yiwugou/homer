@@ -18,6 +18,14 @@ import com.yiwugou.homer.core.server.Server;
 import com.yiwugou.homer.core.util.AssertUtils;
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * RequestFactory
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:12:48
+ */
 public class RequestFactory {
     private Class<?> clazz;
     private Method method;

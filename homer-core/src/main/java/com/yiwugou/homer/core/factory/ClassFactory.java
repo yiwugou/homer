@@ -3,6 +3,14 @@ package com.yiwugou.homer.core.factory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *
+ * ClassFactory
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:12:24
+ */
 public class ClassFactory {
     private static final Map<Class<?>, Object> CLASS_MAP = new ConcurrentHashMap<>();
 

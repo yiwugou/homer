@@ -1,5 +1,13 @@
 package com.yiwugou.homer.core.exception;
 
+/**
+ *
+ * HomerException
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:12:07
+ */
 public class HomerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

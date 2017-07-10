@@ -9,6 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yiwugou.homer.core.enums.MethodModelEnum;
 import com.yiwugou.homer.core.factory.MethodHandlerFactory;
 import com.yiwugou.homer.core.hanlder.MethodHandler;
@@ -22,6 +25,7 @@ import com.yiwugou.homer.core.hanlder.MethodHandler;
  * @since 2017年5月24日 上午10:31:33
  */
 public class ProxyInvocationHandler implements InvocationHandler {
+    private static final Logger log = LoggerFactory.getLogger(ProxyInvocationHandler.class);
     private Class<?> clazz;
     private Homer homer;
 
@@ -48,12 +52,16 @@ public class ProxyInvocationHandler implements InvocationHandler {
         }
 
         MethodHandler handle = this.methodHandlerMap.get(method);
-
+        long start = System.currentTimeMillis();
+        Object obj = null;
         if (handle.getMethodModel() == MethodModelEnum.FUTURE) {
-            return this.futureInvoke(handle, args);
+            obj = this.futureInvoke(handle, args);
+        } else {
+            obj = handle.invoke(args);
         }
-
-        return handle.invoke(args);
+        log.debug("method is {}, args is {}, back is {}, waste time is {}", method, args, obj,
+                System.currentTimeMillis() - start);
+        return obj;
     }
 
     public Future<Object> futureInvoke(final MethodHandler handle, final Object[] args) {

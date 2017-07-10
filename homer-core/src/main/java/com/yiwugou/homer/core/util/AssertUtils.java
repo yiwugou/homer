@@ -1,5 +1,13 @@
 package com.yiwugou.homer.core.util;
 
+/**
+ *
+ * AssertUtils
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:32
+ */
 public class AssertUtils {
     public static <T extends Object> T notNull(T obj, String name) {
         if (obj == null) {

@@ -5,6 +5,14 @@ import java.util.Properties;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * PropertiesFileConfigLoader
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:10:23
+ */
 public class PropertiesFileConfigLoader implements ConfigLoader {
     private ConfigLoader configLoader;
 

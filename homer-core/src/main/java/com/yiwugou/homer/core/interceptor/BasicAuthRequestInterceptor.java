@@ -4,6 +4,14 @@ import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.util.Base64Utils;
 
+/**
+ *
+ * BasicAuthRequestInterceptor
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:55
+ */
 public class BasicAuthRequestInterceptor implements RequestInterceptor {
 
     private final String headerValue;

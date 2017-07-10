@@ -16,6 +16,14 @@ import java.util.Map;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.HomerException;
 
+/**
+ *
+ * CommonUtils
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:45
+ */
 public class CommonUtils {
 
     public static String bytesToString(byte[] bs, String def) {

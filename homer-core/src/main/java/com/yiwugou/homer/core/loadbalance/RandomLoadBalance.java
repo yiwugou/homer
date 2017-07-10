@@ -6,6 +6,14 @@ import java.util.Random;
 
 import com.yiwugou.homer.core.server.Server;
 
+/**
+ *
+ * RandomLoadBalance
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:14:54
+ */
 public class RandomLoadBalance implements LoadBalance {
     private final Random random = new Random();
 

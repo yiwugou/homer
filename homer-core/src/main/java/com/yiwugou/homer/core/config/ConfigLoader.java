@@ -1,5 +1,13 @@
 package com.yiwugou.homer.core.config;
 
+/**
+ *
+ * ConfigLoader
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:10:05
+ */
 public interface ConfigLoader {
     /**
      * <pre>

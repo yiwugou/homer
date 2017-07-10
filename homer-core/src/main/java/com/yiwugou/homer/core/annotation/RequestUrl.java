@@ -6,6 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ *
+ * RequestUrl
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:09:23
+ */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

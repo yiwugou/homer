@@ -4,6 +4,14 @@ import java.lang.reflect.Method;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * ToStringMethodHandler
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:47
+ */
 public class ToStringMethodHandler extends AbstractMethodHandler {
     private Class<?> clazz;
 

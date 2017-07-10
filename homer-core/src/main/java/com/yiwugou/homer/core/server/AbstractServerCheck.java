@@ -8,6 +8,14 @@ import com.yiwugou.homer.core.client.HttpClient;
 import com.yiwugou.homer.core.loadbalance.HttpPing;
 import com.yiwugou.homer.core.loadbalance.Ping;
 
+/**
+ *
+ * AbstractServerCheck
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:03
+ */
 public abstract class AbstractServerCheck implements ServerCheck {
     protected final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(10);
     protected Ping ping = new HttpPing(new HttpClient());

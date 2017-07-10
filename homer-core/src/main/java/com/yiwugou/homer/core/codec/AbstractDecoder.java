@@ -6,6 +6,14 @@ import com.yiwugou.homer.core.Response;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.DecoderException;
 
+/**
+ *
+ * AbstractDecoder
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:09:50
+ */
 public abstract class AbstractDecoder implements Decoder {
 
     public abstract Object objectDecode(final Response response, final Type returnType);

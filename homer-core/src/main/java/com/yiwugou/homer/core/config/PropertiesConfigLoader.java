@@ -6,6 +6,14 @@ import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.AllArgsConstructor;
 
+/**
+ *
+ * PropertiesConfigLoader
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:10:19
+ */
 @AllArgsConstructor
 public class PropertiesConfigLoader implements ConfigLoader {
 

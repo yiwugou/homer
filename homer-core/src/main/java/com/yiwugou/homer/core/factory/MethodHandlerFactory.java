@@ -13,6 +13,14 @@ import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.AllArgsConstructor;
 
+/**
+ *
+ * MethodHandlerFactory
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:12:39
+ */
 @AllArgsConstructor
 public class MethodHandlerFactory {
     private Class<?> clazz;

@@ -6,6 +6,14 @@ import com.yiwugou.homer.core.server.ServerHandler;
 
 import lombok.Data;
 
+/**
+ *
+ * MethodOptions
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:10:10
+ */
 @Data
 public class MethodOptions {
     private ServerHandler serverHandler;

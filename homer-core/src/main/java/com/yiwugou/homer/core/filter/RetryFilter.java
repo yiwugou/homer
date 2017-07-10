@@ -2,6 +2,14 @@ package com.yiwugou.homer.core.filter;
 
 import com.yiwugou.homer.core.invoker.Invoker;
 
+/**
+ *
+ * RetryFilter
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:13:12
+ */
 public class RetryFilter implements Filter {
 
     @Override

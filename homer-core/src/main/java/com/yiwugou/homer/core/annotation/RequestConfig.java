@@ -9,6 +9,14 @@ import java.lang.annotation.Target;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.loadbalance.RandomLoadBalance;
 
+/**
+ *
+ * RequestConfig
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:09:00
+ */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

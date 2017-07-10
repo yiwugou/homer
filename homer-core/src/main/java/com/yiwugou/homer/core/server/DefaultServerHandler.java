@@ -10,6 +10,14 @@ import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.Getter;
 
+/**
+ *
+ * DefaultServerHandler
+ * 
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年7月10日 下午3:15:12
+ */
 public class DefaultServerHandler implements ServerHandler {
     @Getter
     private List<Server> upServers = new CopyOnWriteArrayList<>();

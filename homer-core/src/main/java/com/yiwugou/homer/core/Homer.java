@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.client.HttpClient;
 import com.yiwugou.homer.core.codec.Decoder;
@@ -19,6 +22,7 @@ import com.yiwugou.homer.core.filter.cache.FilterCache;
 import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  *
@@ -28,8 +32,9 @@ import lombok.Getter;
  *
  * @since 2017年5月24日 上午10:30:41
  */
+@ToString
 public final class Homer {
-
+    private static final Logger log = LoggerFactory.getLogger(Homer.class);
     @Getter
     private final Client client;
     @Getter
@@ -142,8 +147,10 @@ public final class Homer {
         }
 
         public Homer build() {
-            return new Homer(this.client, this.configLoader, this.filterCache, this.decoder, this.instanceCreater,
-                    this.threadPoolSize, this.filters, this.requestInterceptors);
+            Homer homer = new Homer(this.client, this.configLoader, this.filterCache, this.decoder,
+                    this.instanceCreater, this.threadPoolSize, this.filters, this.requestInterceptors);
+            log.debug("homer is {}", homer);
+            return homer;
         }
     }
 
