@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.yiwugou.homer.core.filter.Filter;
+import com.yiwugou.homer.core.interceptor.Interceptor;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.loadbalance.RandomLoadBalance;
 
@@ -63,4 +65,14 @@ public @interface RequestConfig {
      * 负载均衡
      */
     Class<? extends LoadBalance> loadBalance() default RandomLoadBalance.class;
+
+    /**
+     * 过滤器
+     */
+    Class<? extends Filter>[] filters() default {};
+
+    /**
+     * 拦截器
+     */
+    Class<? extends Interceptor>[] interceptors() default {};
 }

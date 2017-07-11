@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  *
  * HashCodeMethodHandler
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:13:40
@@ -21,7 +21,7 @@ public class HashCodeMethodHandler extends AbstractMethodHandler {
     }
 
     @Override
-    public Object invoke(Object[] args) throws Throwable {
+    public Object apply(Object[] args) throws Throwable {
         return this.hash();
     }
 

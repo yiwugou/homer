@@ -49,7 +49,7 @@ public class DefaultMethodHandler extends AbstractMethodHandler {
      * first time invoke is called.
      */
     @Override
-    public Object invoke(Object[] argv) throws Throwable {
+    public Object apply(Object[] argv) throws Throwable {
         if (this.handle == null) {
             throw new IllegalStateException("Default method handler invoked before proxy has been bound.");
         }

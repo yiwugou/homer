@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  *
  * EqualsMethodHandler
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:13:35
@@ -23,7 +23,7 @@ public class EqualsMethodHandler extends AbstractMethodHandler {
     }
 
     @Override
-    public Object invoke(Object[] args) throws Throwable {
+    public Object apply(Object[] args) throws Throwable {
         try {
             Object otherHandler = args.length > 0 && args[0] != null ? Proxy.getInvocationHandler(args[0]) : null;
 

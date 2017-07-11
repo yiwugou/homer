@@ -7,12 +7,12 @@ import com.yiwugou.homer.core.util.Base64Utils;
 /**
  *
  * BasicAuthRequestInterceptor
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:13:55
  */
-public class BasicAuthRequestInterceptor implements RequestInterceptor {
+public class BasicAuthRequestInterceptor extends RequestInterceptorAdapter {
 
     private final String headerValue;
 
@@ -25,7 +25,8 @@ public class BasicAuthRequestInterceptor implements RequestInterceptor {
     }
 
     @Override
-    public void apply(Request request) {
+    public void requestApply(Request request) {
         request.addHeader("Authorization", this.headerValue);
     }
+
 }

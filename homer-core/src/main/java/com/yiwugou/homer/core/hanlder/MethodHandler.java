@@ -1,6 +1,6 @@
 package com.yiwugou.homer.core.hanlder;
 
-import com.yiwugou.homer.core.enums.MethodModelEnum;
+import com.yiwugou.homer.core.invoker.Function;
 
 /**
  *
@@ -10,10 +10,6 @@ import com.yiwugou.homer.core.enums.MethodModelEnum;
  *
  * @since 2017年7月10日 下午3:08:20
  */
-public interface MethodHandler {
-
-    Object invoke(Object[] args) throws Throwable;
-
-    MethodModelEnum getMethodModel();
+public interface MethodHandler extends Function<Object[], Object> {
 
 }

@@ -7,7 +7,7 @@ import com.yiwugou.homer.core.util.CommonUtils;
 /**
  *
  * ToStringMethodHandler
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:13:47
@@ -23,7 +23,7 @@ public class ToStringMethodHandler extends AbstractMethodHandler {
     }
 
     @Override
-    public Object invoke(Object[] args) throws Throwable {
+    public Object apply(Object[] args) throws Throwable {
         return "class is " + this.clazz.getName() + "; methods is " + CommonUtils.joinToString(",", this.methods);
     }
 

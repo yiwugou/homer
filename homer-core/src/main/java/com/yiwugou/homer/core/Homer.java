@@ -2,9 +2,6 @@ package com.yiwugou.homer.core;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +14,7 @@ import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.config.NoneConfigLoader;
 import com.yiwugou.homer.core.factory.DefaultInstanceCreater;
 import com.yiwugou.homer.core.factory.InstanceCreater;
-import com.yiwugou.homer.core.filter.Filter;
 import com.yiwugou.homer.core.filter.cache.FilterCache;
-import com.yiwugou.homer.core.interceptor.RequestInterceptor;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -47,22 +42,15 @@ public final class Homer {
     private final InstanceCreater instanceCreater;
     @Getter
     private final int threadPoolSize;
-    @Getter
-    private final List<Filter> filters;
-    @Getter
-    private final List<RequestInterceptor> requestInterceptors;
 
     private Homer(Client client, ConfigLoader configLoader, FilterCache filterCache, Decoder decoder,
-            InstanceCreater instanceCreater, int threadPoolSize, List<Filter> filters,
-            List<RequestInterceptor> requestInterceptors) {
+            InstanceCreater instanceCreater, int threadPoolSize) {
         this.client = client;
         this.configLoader = configLoader;
         this.filterCache = filterCache;
         this.decoder = decoder;
         this.instanceCreater = instanceCreater;
         this.threadPoolSize = threadPoolSize;
-        this.filters = filters;
-        this.requestInterceptors = requestInterceptors;
     }
 
     public <T> T proxy(Class<T> clazz) {
@@ -87,10 +75,6 @@ public final class Homer {
         private InstanceCreater instanceCreater = new DefaultInstanceCreater();
 
         private int threadPoolSize = 10;
-
-        private List<Filter> filters = new LinkedList<>();
-
-        private List<RequestInterceptor> requestInterceptors = new ArrayList<>();
 
         public Builder client(Client client) {
             this.client = client;
@@ -122,33 +106,13 @@ public final class Homer {
             return this;
         }
 
-        public Builder addFilter(int index, Filter filter) {
-            this.filters.add(index, filter);
-            return this;
-        }
-
-        public Builder addFilter(Filter filter) {
-            this.filters.add(filter);
-            return this;
-        }
-
-        public Builder addRequestInterceptor(RequestInterceptor requestInterceptor) {
-            this.requestInterceptors.add(requestInterceptor);
-            return this;
-        }
-
-        public Builder addRequestInterceptor(int index, RequestInterceptor requestInterceptor) {
-            this.requestInterceptors.add(index, requestInterceptor);
-            return this;
-        }
-
         public <T> T proxy(Class<T> clazz) {
             return this.build().proxy(clazz);
         }
 
         public Homer build() {
             Homer homer = new Homer(this.client, this.configLoader, this.filterCache, this.decoder,
-                    this.instanceCreater, this.threadPoolSize, this.filters, this.requestInterceptors);
+                    this.instanceCreater, this.threadPoolSize);
             log.debug("homer is {}", homer);
             return homer;
         }

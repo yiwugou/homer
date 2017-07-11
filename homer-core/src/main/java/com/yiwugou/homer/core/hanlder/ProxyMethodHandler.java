@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -28,10 +29,11 @@ import com.yiwugou.homer.core.filter.CacheFilter;
 import com.yiwugou.homer.core.filter.ExecuteFilter;
 import com.yiwugou.homer.core.filter.FallbackFilter;
 import com.yiwugou.homer.core.filter.Filter;
+import com.yiwugou.homer.core.filter.FutureFilter;
 import com.yiwugou.homer.core.filter.MockFilter;
 import com.yiwugou.homer.core.filter.RetryFilter;
 import com.yiwugou.homer.core.interceptor.BasicAuthRequestInterceptor;
-import com.yiwugou.homer.core.interceptor.RequestInterceptor;
+import com.yiwugou.homer.core.interceptor.Interceptor;
 import com.yiwugou.homer.core.invoker.DefaultInvoker;
 import com.yiwugou.homer.core.invoker.Function;
 import com.yiwugou.homer.core.invoker.Invoker;
@@ -52,22 +54,23 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     private Client client;
     private Method method;
     private MethodOptions methodOptions;
-    private List<RequestInterceptor> requestInterceptors;
+    private List<Interceptor> interceptors = new LinkedList<>();
     private Decoder decoder;
     private Class<?> clazz;
-    private List<Filter> filters;
+    private List<Filter> filters = new LinkedList<>();
     private Type actualReturnType;
     private Invoker invoker;
+    private int threadPoolSize;
     private MethodModelEnum methodModel = MethodModelEnum.NORMAL;
 
     public ProxyMethodHandler(Homer homer, Method method) {
         super();
         this.client = homer.getClient();
         this.method = method;
-        this.requestInterceptors = homer.getRequestInterceptors();
         this.decoder = homer.getDecoder();
         this.clazz = this.method.getDeclaringClass();
-        this.filters = homer.getFilters();
+
+        this.threadPoolSize = homer.getThreadPoolSize();
         this.methodOptions = new MethodOptionsFactory(method, homer.getConfigLoader(), homer.getInstanceCreater())
                 .create();
         log.debug("method options is {}", this.methodOptions);
@@ -89,12 +92,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
     }
 
     @Override
-    public MethodModelEnum getMethodModel() {
-        return this.methodModel;
-    }
-
-    @Override
-    public Object invoke(Object[] args) throws Throwable {
+    public Object apply(Object[] args) throws Throwable {
         return this.invoker.invoke(args);
     }
 
@@ -104,7 +102,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
             String[] us = requestUrl.basicAuth().split(":");
             String username = us[0];
             String password = us[1];
-            this.requestInterceptors.add(new BasicAuthRequestInterceptor(username, password));
+            this.interceptors.add(new BasicAuthRequestInterceptor(username, password));
         }
     }
 
@@ -121,6 +119,10 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         }
         if (this.methodOptions.getMock()) {
             this.filters.add(0, new MockFilter());
+        }
+
+        if (this.methodModel == MethodModelEnum.FUTURE) {
+            this.filters.add(0, new FutureFilter(this.threadPoolSize));
         }
 
     }
@@ -146,9 +148,9 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
             try {
                 Request request = new RequestFactory(this.method, this.methodOptions, args, server).create();
                 log.debug("request is {}", request);
-                if (this.requestInterceptors != null) {
-                    for (RequestInterceptor requestInterceptor : this.requestInterceptors) {
-                        requestInterceptor.apply(request);
+                if (this.interceptors != null) {
+                    for (Interceptor requestInterceptor : this.interceptors) {
+                        requestInterceptor.requestApply(request);
                     }
                 }
                 Object obj = this.executeAndDecode(request);
