@@ -17,7 +17,7 @@ public class MockFilter implements Filter {
         try {
             obj = invoker.invoke(args);
         } catch (Exception e) {
-            if (invoker.getMethodOptions().getMock()) {
+            if (invoker.getMethodMetadata().getMock()) {
                 e.printStackTrace();
             } else {
                 throw e;

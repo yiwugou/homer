@@ -8,14 +8,14 @@ import lombok.Data;
 
 /**
  *
- * MethodOptions
+ * MethodMetadata
  *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:10:10
  */
 @Data
-public class MethodOptions {
+public class MethodMetadata {
     private ServerHandler serverHandler;
     /**
      * 重试次数

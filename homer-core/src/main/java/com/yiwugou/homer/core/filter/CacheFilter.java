@@ -24,7 +24,7 @@ public class CacheFilter implements Filter {
     @Override
     public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         Object obj = null;
-        if (invoker.getMethodOptions().getCache() > 0) {
+        if (invoker.getMethodMetadata().getCache() > 0) {
             obj = this.filterCache.get(invoker.getMethod(), args);
             if (obj != null) {
                 return obj;
@@ -33,10 +33,10 @@ public class CacheFilter implements Filter {
 
         obj = invoker.invoke(args);
 
-        if (invoker.getMethodOptions().getCache() > 0) {
+        if (invoker.getMethodMetadata().getCache() > 0) {
             if (obj != null && obj instanceof Serializable) {
                 this.filterCache.set(invoker.getMethod(), args, (Serializable) obj,
-                        invoker.getMethodOptions().getCache());
+                        invoker.getMethodMetadata().getCache());
             }
         }
         return obj;

@@ -9,7 +9,7 @@ import com.yiwugou.homer.core.Homer;
 import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.config.ConfigLoader;
-import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.config.MethodMetadata;
 import com.yiwugou.homer.core.constant.RequestDefault;
 import com.yiwugou.homer.core.loadbalance.LoadBalance;
 import com.yiwugou.homer.core.server.ServerHandler;
@@ -22,7 +22,7 @@ import com.yiwugou.homer.core.server.ServerHandler;
  *
  * @since 2017年7月10日 下午3:12:44
  */
-public class MethodOptionsFactory {
+public class MethodMetadataFactory {
     private static final Logger log = LoggerFactory.getLogger(Homer.class);
 
     private Class<?> clazz;
@@ -34,7 +34,7 @@ public class MethodOptionsFactory {
     private String methodName;
     private String classMethodName;
 
-    public MethodOptionsFactory(Method method, ConfigLoader configLoader, InstanceCreater instanceCreater) {
+    public MethodMetadataFactory(Method method, ConfigLoader configLoader, InstanceCreater instanceCreater) {
         this.method = method;
         this.configLoader = configLoader;
         this.instanceCreater = instanceCreater;
@@ -44,37 +44,37 @@ public class MethodOptionsFactory {
         this.classMethodName = this.className + "." + this.methodName;
     }
 
-    public MethodOptions create() {
+    public MethodMetadata create() {
         RequestConfig classRequestConfig = this.clazz.getAnnotation(RequestConfig.class);
 
-        MethodOptions methodOptions = new MethodOptions();
+        MethodMetadata methodMetadata = new MethodMetadata();
 
         RequestConfig methodRequestConfig = this.method.getAnnotation(RequestConfig.class);
 
-        this.initRetry(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initRetry(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initExecute(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initExecute(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initActive(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initActive(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initCache(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initCache(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initMock(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initMock(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initLoadBalance(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initLoadBalance(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initConnectTimeout(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initConnectTimeout(classRequestConfig, methodMetadata, methodRequestConfig);
 
-        this.initReadTimeout(classRequestConfig, methodOptions, methodRequestConfig);
+        this.initReadTimeout(classRequestConfig, methodMetadata, methodRequestConfig);
 
         RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
         ServerHandler serverHandler = this.instanceCreater.createServerHandler(requestUrl, this.clazz,
                 this.configLoader);
-        methodOptions.setServerHandler(serverHandler);
-        return methodOptions;
+        methodMetadata.setServerHandler(serverHandler);
+        return methodMetadata;
     }
 
-    private void initLoadBalance(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initLoadBalance(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Class<? extends LoadBalance> classLoadBalance = this.configLoader.loader(
                 this.className + ConfigLoader.LOAD_BALANCE,
@@ -88,7 +88,7 @@ public class MethodOptionsFactory {
         methodOptions.setLoadBalance(loadBalance);
     }
 
-    private void initMock(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initMock(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Boolean classMock = this.configLoader.loader(this.className + ConfigLoader.MOCK,
                 classRequestConfig == null ? Boolean.TRUE : classRequestConfig.mock());
@@ -99,7 +99,7 @@ public class MethodOptionsFactory {
         methodOptions.setMock(mock);
     }
 
-    private void initCache(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initCache(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Long classCache = this.configLoader.loader(this.className + ConfigLoader.CACHE,
                 classRequestConfig == null ? -1L : classRequestConfig.cache());
@@ -110,7 +110,7 @@ public class MethodOptionsFactory {
         methodOptions.setCache(cache);
     }
 
-    private void initActive(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initActive(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Integer classActive = this.configLoader.loader(this.className + ConfigLoader.ACTIVE,
                 classRequestConfig == null ? RequestDefault.ACTIVE : classRequestConfig.active());
@@ -124,7 +124,7 @@ public class MethodOptionsFactory {
         methodOptions.setActive(active);
     }
 
-    private void initExecute(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initExecute(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Integer classExecute = this.configLoader.loader(this.className + ConfigLoader.EXECUTE,
                 classRequestConfig == null ? RequestDefault.EXECUTE : classRequestConfig.execute());
@@ -138,7 +138,7 @@ public class MethodOptionsFactory {
         methodOptions.setExecute(execute);
     }
 
-    private void initRetry(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initRetry(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Integer classRetry = this.configLoader.loader(this.className + ConfigLoader.RETRY,
                 classRequestConfig == null ? RequestDefault.RETRY : classRequestConfig.retry());
@@ -149,7 +149,7 @@ public class MethodOptionsFactory {
         methodOptions.setRetry(retry);
     }
 
-    private void initConnectTimeout(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initConnectTimeout(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Integer classConnectTimeout = this.configLoader.loader(this.className + ConfigLoader.CONNECT_TIMEOUT,
                 classRequestConfig == null ? RequestDefault.CONNECT_TIMEOUT : classRequestConfig.connectTimeout());
@@ -163,7 +163,7 @@ public class MethodOptionsFactory {
         methodOptions.setConnectTimeout(connectTimeout);
     }
 
-    private void initReadTimeout(RequestConfig classRequestConfig, MethodOptions methodOptions,
+    private void initReadTimeout(RequestConfig classRequestConfig, MethodMetadata methodOptions,
             RequestConfig methodRequestConfig) {
         Integer classReadTimeout = this.configLoader.loader(this.className + ConfigLoader.READ_TIMEOUT,
                 classRequestConfig == null ? RequestDefault.READ_TIMEOUT : classRequestConfig.readTimeout());

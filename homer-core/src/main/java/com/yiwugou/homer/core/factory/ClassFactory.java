@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *
  * ClassFactory
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:12:24
@@ -40,7 +40,7 @@ public class ClassFactory {
         return clazz.newInstance();
     }
 
-    public static final <T> T newInstance(Class<T> clazz, boolean isSingleton, T defaultObject) throws Exception {
+    public static final <T> T newInstance(Class<T> clazz, boolean isSingleton, T defaultObject) {
         try {
             T obj = ClassFactory.newInstance(clazz, isSingleton);
             return obj;

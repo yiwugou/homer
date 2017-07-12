@@ -30,8 +30,8 @@ public class ExecuteFilter implements Filter {
     @Override
     public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         String methodName = invoker.getMethod().getName();
-        if (this.counter.get(methodName).incrementAndGet() > invoker.getMethodOptions().getExecute()) {
-            throw new ExecuteException("execute is " + invoker.getMethodOptions().getExecute());
+        if (this.counter.get(methodName).incrementAndGet() > invoker.getMethodMetadata().getExecute()) {
+            throw new ExecuteException("execute is " + invoker.getMethodMetadata().getExecute());
         }
         return invoker.invoke(args);
     }

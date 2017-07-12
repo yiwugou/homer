@@ -2,12 +2,12 @@ package com.yiwugou.homer.core.invoker;
 
 import java.lang.reflect.Method;
 
-import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.config.MethodMetadata;
 
 /**
  *
  * Invoker
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:14:19
@@ -17,6 +17,6 @@ public interface Invoker {
 
     Method getMethod();
 
-    MethodOptions getMethodOptions();
+    MethodMetadata getMethodMetadata();
 
 }

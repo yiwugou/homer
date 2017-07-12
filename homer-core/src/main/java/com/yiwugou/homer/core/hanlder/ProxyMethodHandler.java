@@ -15,14 +15,16 @@ import com.yiwugou.homer.core.Homer;
 import com.yiwugou.homer.core.ProxyInvocationHandler;
 import com.yiwugou.homer.core.Request;
 import com.yiwugou.homer.core.Response;
+import com.yiwugou.homer.core.annotation.RequestConfig;
 import com.yiwugou.homer.core.annotation.RequestUrl;
 import com.yiwugou.homer.core.client.Client;
 import com.yiwugou.homer.core.codec.Decoder;
-import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.config.MethodMetadata;
 import com.yiwugou.homer.core.enums.MethodModelEnum;
 import com.yiwugou.homer.core.exception.ResponseException;
 import com.yiwugou.homer.core.exception.ServerException;
-import com.yiwugou.homer.core.factory.MethodOptionsFactory;
+import com.yiwugou.homer.core.factory.ClassFactory;
+import com.yiwugou.homer.core.factory.MethodMetadataFactory;
 import com.yiwugou.homer.core.factory.RequestFactory;
 import com.yiwugou.homer.core.filter.ActiveFilter;
 import com.yiwugou.homer.core.filter.CacheFilter;
@@ -53,7 +55,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
 
     private Client client;
     private Method method;
-    private MethodOptions methodOptions;
+    private MethodMetadata methodMetadata;
     private List<Interceptor> interceptors = new LinkedList<>();
     private Decoder decoder;
     private Class<?> clazz;
@@ -71,12 +73,12 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         this.clazz = this.method.getDeclaringClass();
 
         this.threadPoolSize = homer.getThreadPoolSize();
-        this.methodOptions = new MethodOptionsFactory(method, homer.getConfigLoader(), homer.getInstanceCreater())
+        this.methodMetadata = new MethodMetadataFactory(method, homer.getConfigLoader(), homer.getInstanceCreater())
                 .create();
-        log.debug("method options is {}", this.methodOptions);
+        log.debug("MethodMetadata is {}", this.methodMetadata);
         this.initMethodModel();
-        this.addDefaultFilters(homer);
-        this.initDefaultRequestInterceptors();
+        this.addFilters(homer);
+        this.addInterceptors();
         this.initInvoke();
     }
 
@@ -96,7 +98,7 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
         return this.invoker.invoke(args);
     }
 
-    private void initDefaultRequestInterceptors() {
+    private void addInterceptors() {
         RequestUrl requestUrl = this.clazz.getAnnotation(RequestUrl.class);
         if (CommonUtils.hasTest(requestUrl.basicAuth())) {
             String[] us = requestUrl.basicAuth().split(":");
@@ -104,20 +106,38 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
             String password = us[1];
             this.interceptors.add(new BasicAuthRequestInterceptor(username, password));
         }
+
+        this.addRequestConfigInterceptors(this.clazz.getAnnotation(RequestConfig.class));
+        this.addRequestConfigInterceptors(this.method.getAnnotation(RequestConfig.class));
+        log.debug("{} interceptors is {}", this.method, this.interceptors);
     }
 
-    private void addDefaultFilters(Homer homer) {
-        if (this.methodOptions.getRetry() != null || this.methodOptions.getRetry() > 0) {
+    private void addRequestConfigInterceptors(RequestConfig requestConfig) {
+        if (requestConfig != null) {
+            Class<? extends Interceptor>[] interceptorClasses = requestConfig.interceptors();
+            if (interceptorClasses != null) {
+                for (Class<? extends Interceptor> interceptorClass : interceptorClasses) {
+                    Interceptor interceptor = ClassFactory.newInstance(interceptorClass, true, null);
+                    if (interceptor != null) {
+                        this.interceptors.add(interceptor);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addFilters(Homer homer) {
+        if (this.methodMetadata.getRetry() != null || this.methodMetadata.getRetry() > 0) {
             this.filters.add(new RetryFilter());
         }
         this.filters.add(0, new ExecuteFilter());
         this.filters.add(0, new ActiveFilter());
         this.filters.add(0, new FallbackFilter());
-        if (homer.getFilterCache() != null && this.methodOptions.getCache() != null
-                && this.methodOptions.getCache() > 0) {
+        if (homer.getFilterCache() != null && this.methodMetadata.getCache() != null
+                && this.methodMetadata.getCache() > 0) {
             this.filters.add(0, new CacheFilter(homer.getFilterCache()));
         }
-        if (this.methodOptions.getMock()) {
+        if (this.methodMetadata.getMock()) {
             this.filters.add(0, new MockFilter());
         }
 
@@ -125,40 +145,57 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
             this.filters.add(0, new FutureFilter(this.threadPoolSize));
         }
 
+        this.addRequestConfigFilters(this.clazz.getAnnotation(RequestConfig.class));
+        this.addRequestConfigFilters(this.method.getAnnotation(RequestConfig.class));
+        log.debug("{} filters is {}", this.method, this.filters);
+    }
+
+    private void addRequestConfigFilters(RequestConfig requestConfig) {
+        if (requestConfig != null) {
+            Class<? extends Filter>[] filterClasses = requestConfig.filters();
+            if (filterClasses != null) {
+                for (Class<? extends Filter> filterClass : filterClasses) {
+                    Filter filter = ClassFactory.newInstance(filterClass, true, null);
+                    if (filter != null) {
+                        this.filters.add(filter);
+                    }
+                }
+            }
+        }
     }
 
     private void initInvoke() {
-        this.invoker = this
-                .buildFilterChain(new DefaultInvoker(this.methodOptions, this.method, new Function<Object[], Object>() {
-                    @Override
-                    public Object apply(Object[] args) throws Exception {
-                        return ProxyMethodHandler.this.loadBalanceInvoker(args);
-                    }
-                }));
+        Invoker defaultInvoker = new DefaultInvoker(this.methodMetadata, this.method, new Function<Object[], Object>() {
+            @Override
+            public Object apply(Object[] args) throws Exception {
+                return ProxyMethodHandler.this.loadBalanceInvoker(args);
+            }
+        });
+        this.invoker = this.buildFilterChain(defaultInvoker);
     }
 
     private Object loadBalanceInvoker(Object[] args) throws Exception {
         while (true) {
-            Server server = this.methodOptions.getLoadBalance()
-                    .choose(this.methodOptions.getServerHandler().getUpServers(), this.method, args);
+            Server server = this.methodMetadata.getLoadBalance()
+                    .choose(this.methodMetadata.getServerHandler().getUpServers(), this.method, args);
             if (server == null) {
                 throw new ServerException("no server is available! down servers is "
-                        + this.methodOptions.getServerHandler().getDownServers());
+                        + this.methodMetadata.getServerHandler().getDownServers());
             }
             try {
-                Request request = new RequestFactory(this.method, this.methodOptions, args, server).create();
+                Request request = new RequestFactory(this.method, this.methodMetadata, args, server).create();
                 log.debug("request is {}", request);
-                if (this.interceptors != null) {
-                    for (Interceptor requestInterceptor : this.interceptors) {
-                        requestInterceptor.requestApply(request);
-                    }
+
+                for (Interceptor interceptor : this.interceptors) {
+                    interceptor.requestApply(request);
                 }
+
                 Object obj = this.executeAndDecode(request);
-                this.methodOptions.getServerHandler().getServerCheck().serverUp(server);
+                this.methodMetadata.getServerHandler().getServerCheck().serverUp(server);
                 return obj;
             } catch (IOException e) {
                 server.setException(e);
-                this.methodOptions.getServerHandler().getServerCheck().serverDown(server, e);
+                this.methodMetadata.getServerHandler().getServerCheck().serverDown(server, e);
             }
         }
     }
@@ -180,8 +217,8 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
                 }
 
                 @Override
-                public MethodOptions getMethodOptions() {
-                    return invoker.getMethodOptions();
+                public MethodMetadata getMethodMetadata() {
+                    return invoker.getMethodMetadata();
                 }
             };
         }
@@ -190,6 +227,9 @@ public class ProxyMethodHandler extends AbstractMethodHandler {
 
     private Object executeAndDecode(Request request) throws Exception {
         Response response = this.client.execute(request);
+        for (Interceptor interceptor : this.interceptors) {
+            interceptor.responseApply(response);
+        }
         log.debug("response is {}", response);
         if (response.getCode() >= 400) {
             throw new ResponseException(response);

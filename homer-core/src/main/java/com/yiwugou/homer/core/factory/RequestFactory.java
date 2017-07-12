@@ -11,7 +11,7 @@ import com.yiwugou.homer.core.annotation.RequestHeader;
 import com.yiwugou.homer.core.annotation.RequestHeaders;
 import com.yiwugou.homer.core.annotation.RequestMapping;
 import com.yiwugou.homer.core.annotation.RequestParam;
-import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.config.MethodMetadata;
 import com.yiwugou.homer.core.constant.Constants;
 import com.yiwugou.homer.core.exception.ServerException;
 import com.yiwugou.homer.core.server.Server;
@@ -29,16 +29,16 @@ import com.yiwugou.homer.core.util.CommonUtils;
 public class RequestFactory {
     private Class<?> clazz;
     private Method method;
-    private MethodOptions methodOptions;
+    private MethodMetadata methodMetadata;
     private Object[] args;
     private Server server;
 
     private String bodyString;
     private Map<String, Object> formMap = new HashMap<>();
 
-    public RequestFactory(Method method, MethodOptions methodOptions, Object[] args, Server server) {
+    public RequestFactory(Method method, MethodMetadata methodMetadata, Object[] args, Server server) {
         this.method = method;
-        this.methodOptions = methodOptions;
+        this.methodMetadata = methodMetadata;
         this.args = args;
         this.server = server;
         this.clazz = method.getDeclaringClass();
@@ -54,8 +54,8 @@ public class RequestFactory {
         }
 
         Request request = Request.builder().method(requestMapping.method()).url(this.server.getHostPort() + "/" + path)
-                .body(this.body()).headers(this.processHeaders()).connectTimeout(this.methodOptions.getConnectTimeout())
-                .readTimeout(this.methodOptions.getReadTimeout()).build();
+                .body(this.body()).headers(this.processHeaders()).connectTimeout(this.methodMetadata.getConnectTimeout())
+                .readTimeout(this.methodMetadata.getReadTimeout()).build();
         return request;
 
     }

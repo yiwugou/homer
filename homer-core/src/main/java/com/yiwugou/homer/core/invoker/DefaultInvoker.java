@@ -2,7 +2,7 @@ package com.yiwugou.homer.core.invoker;
 
 import java.lang.reflect.Method;
 
-import com.yiwugou.homer.core.config.MethodOptions;
+import com.yiwugou.homer.core.config.MethodMetadata;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
 /**
  *
  * DefaultInvoker
- * 
+ *
  * @author zhanxiaoyong@yiwugou.com
  *
  * @since 2017年7月10日 下午3:14:02
@@ -18,7 +18,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class DefaultInvoker implements Invoker {
     @Getter
-    private MethodOptions methodOptions;
+    private MethodMetadata methodMetadata;
     @Getter
     private Method method;
 

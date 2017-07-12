@@ -21,8 +21,8 @@ public class ActiveFilter implements Filter {
     public Object invoke(Invoker invoker, Object[] args) throws Throwable {
         Object obj = null;
         try {
-            if (this.data.incrementAndGet() > invoker.getMethodOptions().getActive()) {
-                throw new ActiveException("active is " + invoker.getMethodOptions().getActive());
+            if (this.data.incrementAndGet() > invoker.getMethodMetadata().getActive()) {
+                throw new ActiveException("active is " + invoker.getMethodMetadata().getActive());
             }
             obj = invoker.invoke(args);
         } finally {
