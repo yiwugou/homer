@@ -43,6 +43,12 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.yiwugou.dbbus</groupId>
+            <artifactId>dbbus-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
