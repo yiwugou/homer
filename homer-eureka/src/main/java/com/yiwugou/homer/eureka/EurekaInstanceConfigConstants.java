@@ -9,7 +9,6 @@ package com.yiwugou.homer.eureka;
  * @since 2017年5月11日 下午4:53:33
  */
 public final class EurekaInstanceConfigConstants {
-    // NOTE: all keys are before any prefixes are applied
     public static final String INSTANCE_ID_KEY = "instanceId";
     public static final String APP_NAME_KEY = "name";
     public static final String APP_GROUP_KEY = "appGroup";

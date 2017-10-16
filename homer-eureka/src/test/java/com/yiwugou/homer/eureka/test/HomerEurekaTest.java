@@ -24,6 +24,14 @@ import com.yiwugou.homer.eureka.HomerEurekaClientConfig;
 import com.yiwugou.homer.eureka.HomerEurekaInstanceConfig;
 import com.yiwugou.homer.eureka.PropertiesFileDynamicProperty;
 
+/**
+ *
+ * HomerEurekaTest
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:21:20
+ */
 public class HomerEurekaTest {
     private FooService fooService;
     private BarService barService;

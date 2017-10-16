@@ -10,7 +10,6 @@ package com.yiwugou.homer.eureka;
  */
 final public class EurekaTransportConfigConstants {
 
-    // NOTE: all keys are before any prefixes are applied
     public static final String SESSION_RECONNECT_INTERVAL_KEY = "sessionedClientReconnectIntervalSeconds";
     public static final String QUARANTINE_REFRESH_PERCENTAGE_KEY = "retryableClientQuarantineRefreshPercentage";
     public static final String DATA_STALENESS_THRESHOLD_KEY = "applicationsResolverDataStalenessThresholdSeconds";

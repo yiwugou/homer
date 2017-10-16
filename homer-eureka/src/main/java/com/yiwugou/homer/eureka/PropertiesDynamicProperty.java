@@ -8,6 +8,14 @@ import com.yiwugou.homer.core.util.CommonUtils;
 
 import lombok.AllArgsConstructor;
 
+/**
+ *
+ * PropertiesDynamicProperty
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:55
+ */
 @AllArgsConstructor
 public class PropertiesDynamicProperty implements DynamicProperty {
 

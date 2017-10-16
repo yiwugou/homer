@@ -2,6 +2,14 @@ package com.yiwugou.homer.eureka;
 
 import com.netflix.discovery.shared.transport.EurekaTransportConfig;
 
+/**
+ *
+ * HomerEurekaTransportConfig
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:48
+ */
 public class HomerEurekaTransportConfig implements EurekaTransportConfig {
 
     private static final String SUB_NAMESPACE = EurekaTransportConfigConstants.TRANSPORT_CONFIG_SUB_NAMESPACE + ".";

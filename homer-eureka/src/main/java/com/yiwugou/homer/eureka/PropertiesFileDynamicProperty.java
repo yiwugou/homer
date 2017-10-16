@@ -6,13 +6,23 @@ import java.util.Properties;
 
 import com.yiwugou.homer.core.util.CommonUtils;
 
+/**
+ *
+ * PropertiesFileDynamicProperty
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:21:01
+ */
 public class PropertiesFileDynamicProperty implements DynamicProperty {
     private DynamicProperty dynamicProperty;
 
+    private static final String PROPERTIES_FILE_SUFFIX = ".properties";
+
     public PropertiesFileDynamicProperty(String propertiesFile) {
         try {
-            if (!propertiesFile.endsWith(".properties")) {
-                propertiesFile = propertiesFile + ".properties";
+            if (!propertiesFile.endsWith(PROPERTIES_FILE_SUFFIX)) {
+                propertiesFile = propertiesFile + PROPERTIES_FILE_SUFFIX;
             }
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             InputStream input = loader.getResourceAsStream(propertiesFile);

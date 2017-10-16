@@ -7,6 +7,14 @@ import com.yiwugou.homer.core.config.ConfigLoader;
 import com.yiwugou.homer.core.factory.InstanceCreater;
 import com.yiwugou.homer.core.server.ServerHandler;
 
+/**
+ *
+ * EurekaInstanceCreater
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:02
+ */
 public class EurekaInstanceCreater implements InstanceCreater {
     private String namespace;
     private Properties properties;

@@ -5,6 +5,14 @@ import java.io.IOException;
 import com.yiwugou.homer.core.server.AbstractServerCheck;
 import com.yiwugou.homer.core.server.Server;
 
+/**
+ *
+ * EurekaServerCheck
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:08
+ */
 public class EurekaServerCheck extends AbstractServerCheck {
 
     private EurekaServerHandler eurekaServerHandler;

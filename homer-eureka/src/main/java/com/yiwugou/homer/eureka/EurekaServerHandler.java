@@ -16,6 +16,14 @@ import com.yiwugou.homer.core.server.ServerHandler;
 
 import lombok.Getter;
 
+/**
+ *
+ * EurekaServerHandler
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:18
+ */
 public class EurekaServerHandler implements ServerHandler {
     @Getter
     private EurekaClient eurekaClient;

@@ -11,7 +11,6 @@ package com.yiwugou.homer.eureka;
 final public class EurekaClientConfigConstants {
     public static final String CLIENT_REGION_FALLBACK_KEY = "eureka.region";
 
-    // NOTE: all keys are before any prefixes are applied
     public static final String CLIENT_REGION_KEY = "region";
 
     public static final String REGISTRATION_ENABLED_KEY = "registration.enabled";
@@ -58,8 +57,7 @@ final public class EurekaClientConfigConstants {
     public static final String EUREKA_SERVER_CONNECT_TIMEOUT_KEY = "eurekaServer.connectTimeout";
     public static final String EUREKA_SERVER_MAX_CONNECTIONS_KEY = "eurekaServer.maxTotalConnections";
     public static final String EUREKA_SERVER_MAX_CONNECTIONS_PER_HOST_KEY = "eurekaServer.maxConnectionsPerHost";
-    // yeah the case on eurekaserver is different, backwards compatibility
-    // requirements :(
+
     public static final String EUREKA_SERVER_CONNECTION_IDLE_TIMEOUT_KEY = "eurekaserver.connectionIdleTimeoutInSeconds";
 
     public static final String SHOULD_LOG_DELTA_DIFF_KEY = "printDeltaFullDiff";
@@ -67,7 +65,6 @@ final public class EurekaClientConfigConstants {
     public static final String CONFIG_DOLLAR_REPLACEMENT_KEY = "dollarReplacement";
     public static final String CONFIG_ESCAPE_CHAR_REPLACEMENT_KEY = "escapeCharReplacement";
 
-    // additional namespaces
     public static final String CONFIG_EXPERIMENTAL_PREFIX = "experimental";
     public static final String CONFIG_AVAILABILITY_ZONE_PREFIX = "availabilityZones";
     public static final String CONFIG_EUREKA_SERVER_SERVICE_URL_PREFIX = "serviceUrl";

@@ -11,6 +11,14 @@ import com.yiwugou.homer.eureka.EurekaClientConfigConstants.Values;
 
 import lombok.Data;
 
+/**
+ *
+ * HomerEurekaClientConfig
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:27
+ */
 @Data
 public class HomerEurekaClientConfig implements EurekaClientConfig {
     public static final String DEFAULT_ZONE = "defaultZone";

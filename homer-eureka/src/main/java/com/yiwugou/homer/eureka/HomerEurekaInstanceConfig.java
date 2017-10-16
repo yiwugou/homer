@@ -6,6 +6,14 @@ import com.netflix.appinfo.AbstractInstanceConfig;
 import com.netflix.appinfo.DataCenterInfo;
 import com.netflix.appinfo.EurekaInstanceConfig;
 
+/**
+ *
+ * HomerEurekaInstanceConfig
+ *
+ * @author zhanxiaoyong@yiwugou.com
+ *
+ * @since 2017年10月16日 下午4:20:40
+ */
 public class HomerEurekaInstanceConfig extends AbstractInstanceConfig implements EurekaInstanceConfig {
     protected String namespace;
 
