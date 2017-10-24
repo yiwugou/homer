@@ -63,7 +63,7 @@ public class HttpClient implements Client {
             connection.addRequestProperty(Constants.ACCEPT, Constants.ACCEPT_ALL);
         }
 
-        if (request.getBody() != null) {
+        if (request.getBody() != null && request.getBody().length > 0) {
             if (contentLength != null) {
                 connection.setFixedLengthStreamingMode(contentLength);
             } else {
